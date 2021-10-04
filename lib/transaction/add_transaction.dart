@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_management/db/database_expense_category.dart';
+import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/db/database_transaction.dart';
 import '../main.dart';
 
@@ -23,28 +25,37 @@ class _AddTransState extends State<AddTrans> {
   String _transaction = "income";
   // String _saveDate;
   String? _account = 'Assets';
-  String? _category = ' ';
+  String? _category = '<select>';
   String? _amount;
   String? _note;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late DatabaseHandler handler;
-  dynamic incomeCategory = [' ','Cash','Card','Salary'];
-  dynamic expenseCategory = [' ','Food','Rent','Gift'];
+  late DatabaseHandlerIncomeCategory handlerIncome;
+  late DatabaseHandlerExpenseCategory handlerExpense;
+
+  List<String>? incomeCate;
+  List<String>? expenseCate;
+
+  var income12 = [];
+  var expense12 = [];
+
+  var incomeCategory = ['<select>'];
+  var expenseCategory = ['<select>'];
+
 
 
   @override
   void initState() {
     super.initState();
+    incomeCate ??= ['Cash'];
+    expenseCate ??= ['Food'];
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
       // await this.addUsers();
       setState(() {
-        // for(int x in expenseList){
-        //   expenseCategory.add(expenseList[x]);
-        //   debugPrint(expenseList[0].toString());
-        // }
+
       });
 
     });
@@ -56,6 +67,48 @@ class _AddTransState extends State<AddTrans> {
       _amount = widget.student!.amount!;
       _note = widget.student!.note;
     }
+
+    ///income Category to list///
+    handlerIncome = DatabaseHandlerIncomeCategory();
+    handlerIncome.initializeDB().whenComplete(() async {
+      List incomeCate12 = await handlerIncome.listIncomeCategory();
+      if(incomeCate12 == null){
+        incomeCate12.add("Cash");
+      }
+      else{
+        incomeCate12.toSet().toList();
+      }
+      debugPrint("$incomeCate12");
+      incomeCate = [...incomeCate12];
+      for(int i = 0; i < incomeCate!.length; i++){
+        incomeCategory.add(incomeCate![i]);
+      }
+      debugPrint("$incomeCategory");
+      setState(() {
+
+      });
+    });
+
+    ///expense category to list///
+    handlerExpense = DatabaseHandlerExpenseCategory();
+    handlerExpense.initializeDB().whenComplete(() async {
+      List expenseCate12 = await handlerExpense.listExpenseCategory();
+      if(expenseCate12 == null){
+        expenseCate12.add("Cash");
+      }
+      else{
+        expenseCate12.toSet().toList();
+      }
+      debugPrint("$expenseCate12");
+      expenseCate = [...expenseCate12];
+      for(int i = 0; i < expenseCate!.length; i++){
+        expenseCategory.add(expenseCate![i]);
+      }
+      debugPrint("$expenseCategory");
+      setState(() {
+
+      });
+    });
   }
 
   final _dateController = TextEditingController(text: DateFormat('MMM dd, yyyy').format(DateTime.now()));
@@ -261,7 +314,7 @@ class _AddTransState extends State<AddTrans> {
                   ? FlatButton(
                       onPressed: () {
                         setState(() {
-                          _category = ' ';
+                          _category = '<select>';
                           section = 0;
                           _transaction = "income";
                         });
@@ -280,7 +333,7 @@ class _AddTransState extends State<AddTrans> {
                   : FlatButton(
                       onPressed: () {
                         setState(() {
-                          _category = ' ';
+                          _category = '<select>';
                           section = 0;
                           _transaction = "income";
                         });
@@ -300,7 +353,7 @@ class _AddTransState extends State<AddTrans> {
                   ? FlatButton(
                       onPressed: () {
                         setState(() {
-                          _category = ' ';
+                          _category = '<select>';
                           section = 1;
                           _transaction = "expense";
                         });
@@ -319,7 +372,7 @@ class _AddTransState extends State<AddTrans> {
                   : FlatButton(
                       onPressed: () {
                         setState(() {
-                          _category = ' ';
+                          _category = '<select>';
                           section = 1;
                           _transaction = "expense";
                         });
@@ -368,6 +421,13 @@ class _AddTransState extends State<AddTrans> {
                       ),
                     ),
                     onPressed: () async {
+                      if(_category == '<select>' && section == 0){
+                        _category = 'Cash';
+                      }else if(_category == '<select>' && section == 1){
+                        _category = 'Food';
+                      }
+
+
                       if (!_formKey.currentState!.validate()) {
                         return;
                       }

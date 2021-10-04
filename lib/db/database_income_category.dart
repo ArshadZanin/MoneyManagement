@@ -70,4 +70,16 @@ class DatabaseHandlerIncomeCategory {
       whereArgs: [id],
     );
   }
+
+  Future<List<dynamic>> listIncomeCategory() async {
+    var dbClient = await initializeDB();
+    var result = await dbClient.rawQuery("SELECT incomeCategory FROM incomeCategories");
+    var incomeCate = [];
+    for (int x = 0 ; x < result.length; x++) {
+      debugPrint("${result[x].values}");
+      incomeCate.add(result[x].values.toString().replaceAll( RegExp(r"\p{P}", unicode: true), ""));
+    }
+    return incomeCate;
+  }
+
 }

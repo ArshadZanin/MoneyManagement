@@ -26,6 +26,29 @@ class _AddIncomeDataState extends State<AddIncomeData> {
     }
   }
 
+  Widget _buildItem(){
+    return TextFormField(
+      initialValue: _incomeCategory,
+      decoration: const InputDecoration(labelText: 'Income Category'),
+      maxLength: 15,
+      style: const TextStyle(
+          color: Colors.white
+      ),
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return 'Name is Required';
+        }
+
+        return null;
+      },
+      onSaved: (String? value) {
+        _incomeCategory = value;
+      },
+      textAlign: TextAlign.left,
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,39 +66,24 @@ class _AddIncomeDataState extends State<AddIncomeData> {
         child: Column(
           children: [
             Container(
-              color: const Color(0xFF13254C).withOpacity(1),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFormField(
-                    initialValue: _incomeCategory,
-                    decoration: const InputDecoration(labelText: 'Income Category'),
-                    maxLength: 15,
-                    style: const TextStyle(
-                        color: Colors.white
-                    ),
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Name is Required';
-                      }
-
-                      return null;
-                    },
-                    onSaved: (String? value) {
-                      _incomeCategory = value;
-                    },
-                    textAlign: TextAlign.left,
-                  ),
+                  _buildItem(),
                 ],
               ),
             ),
             const SizedBox(height: 20,),
             Center(
               child: FlatButton(
-                height: 30,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 color: Colors.red,
-                minWidth: MediaQuery.of(context).size.width - 100,
+                padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
                 onPressed: () async {
                   debugPrint("clicked");
                   if(!_formKey.currentState!.validate()) {

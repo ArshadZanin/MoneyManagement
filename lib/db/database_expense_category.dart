@@ -70,4 +70,16 @@ class DatabaseHandlerExpenseCategory {
       whereArgs: [id],
     );
   }
+
+  Future<List<dynamic>> listExpenseCategory() async {
+    var dbClient = await initializeDB();
+    var result = await dbClient.rawQuery("SELECT expenseCategory FROM expenseCategories");
+    var expenseCate = [];
+    for (int x = 0 ; x < result.length; x++) {
+      debugPrint("${result[x].values}");
+      expenseCate.add(result[x].values.toString().replaceAll( RegExp(r"\p{P}", unicode: true), ""));
+    }
+    return expenseCate;
+  }
+
 }

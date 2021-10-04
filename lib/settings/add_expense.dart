@@ -32,7 +32,7 @@ class _AddExpenseDataState extends State<AddExpenseData> {
   Widget _buildItem(){
     return TextFormField(
       initialValue: _expenseCategory,
-      decoration: const InputDecoration(labelText: 'Income Category', labelStyle: TextStyle(color: Colors.white), focusColor: Colors.white,fillColor: Colors.white),
+      decoration: const InputDecoration(labelText: 'Expense Category'),
       maxLength: 15,
       style: const TextStyle(
           color: Colors.white
@@ -69,7 +69,10 @@ class _AddExpenseDataState extends State<AddExpenseData> {
         child: Column(
           children: [
             Container(
-              color: const Color(0xFF13254C).withOpacity(1),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,10 +84,9 @@ class _AddExpenseDataState extends State<AddExpenseData> {
             const SizedBox(height: 20,),
             Center(
               child: FlatButton(
-                height: 30,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 color: Colors.red,
-                minWidth: MediaQuery.of(context).size.width - 100,
+                padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
                 onPressed: () async {
                   debugPrint("Saved");
                   debugPrint("clicked");
