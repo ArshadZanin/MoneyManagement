@@ -81,5 +81,8 @@ class DatabaseHandlerIncomeCategory {
     }
     return incomeCate;
   }
-
+  Future<void> deleteDb() async {
+    final db = await initializeDB();
+    await db.rawQuery("delete from incomeCategories");
+  }
 }

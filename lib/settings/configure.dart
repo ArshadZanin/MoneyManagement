@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_management/home.dart';
 import 'package:money_management/main.dart';
-import 'package:money_management/settings.dart';
 import 'package:money_management/settings/expense_category.dart';
 import 'package:money_management/settings/income_category.dart';
 

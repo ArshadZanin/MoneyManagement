@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'db/database_transaction.dart';
@@ -14,8 +15,9 @@ class Transaction extends StatefulWidget {
 class _TransactionState extends State<Transaction> {
 
 
-  double? income;
-  double? expense;
+  double? income = 0.0;
+  double? expense = 0.0;
+  double? balance = 0.0;
 
 
 
@@ -27,18 +29,18 @@ class _TransactionState extends State<Transaction> {
   @override
   void initState() {
     super.initState();
-    income ??= 0.0;
-    expense ??= 0.0;
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
+
+      handler.retrieveWithCategory("income");
+
       String? income12 = await handler.calculateIncomeTotal();
-      debugPrint("income error hiiiii $income12");
       income = double.parse(income12!);
-      debugPrint("income in int: $income");
 
       String? expense12 = await handler.calculateExpenseTotal();
       expense = double.parse(expense12!);
-      debugPrint("expense in int: $expense");
+
+      balance = (income! - expense!);
       // await this.addUsers();
       setState(() {});
     });
@@ -259,6 +261,32 @@ class _TransactionState extends State<Transaction> {
                             color: Colors.white10,
                             child:
                             ListTile(
+                              onLongPress: (){
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: Text('Date: ${snapshot.data![index].date}\nTransaction: ${snapshot.data![index].trans}\nAccount: ${snapshot.data![index].account}\nCategory: ${snapshot.data![index].category}\nNote: ${snapshot.data![index].note}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    content: Text(
+                                      "Amount: ${snapshot.data![index].amount.toString()}",
+                                      style: snapshot.data![index].trans == 'income' ?
+                                      const TextStyle(color: Colors.green,fontSize: 20) :
+                                      const TextStyle(color: Colors.red,fontSize: 20),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context, 'go back');
+                                        },
+                                        child: const Text('go back',style: TextStyle(color: Colors.blue),),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                               contentPadding: const EdgeInsets.all(12.0),
                               title: Text(
                                 "${snapshot.data![index].category!} \n ${snapshot.data![index].date}",
@@ -266,6 +294,7 @@ class _TransactionState extends State<Transaction> {
                               ),
                               subtitle: Text(
                                 snapshot.data![index].amount.toString(),
+                                textAlign: TextAlign.end,
                                 style: snapshot.data![index].trans == 'income' ?
                                 const TextStyle(color: Colors.green) :
                                 const TextStyle(color: Colors.red),

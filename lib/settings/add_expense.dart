@@ -32,10 +32,10 @@ class _AddExpenseDataState extends State<AddExpenseData> {
   Widget _buildItem(){
     return TextFormField(
       initialValue: _expenseCategory,
-      decoration: const InputDecoration(labelText: 'Expense Category'),
+      decoration: const InputDecoration(labelText: 'Expense Category',hoverColor: Colors.black,fillColor: Colors.black,focusColor: Colors.black),
       maxLength: 15,
       style: const TextStyle(
-          color: Colors.white
+          color: Colors.black
       ),
       validator: (String? value) {
         if (value!.isEmpty) {

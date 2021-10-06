@@ -38,6 +38,7 @@ dependencies:
   syncfusion_flutter_charts: ^19.2.62
   intl: ^0.17.0
   sqflite: ^2.0.0+4
+  d_chart: ^0.0.2
 
 dev_dependencies:
   flutter_test:

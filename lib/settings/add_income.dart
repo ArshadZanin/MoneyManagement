@@ -29,10 +29,10 @@ class _AddIncomeDataState extends State<AddIncomeData> {
   Widget _buildItem(){
     return TextFormField(
       initialValue: _incomeCategory,
-      decoration: const InputDecoration(labelText: 'Income Category'),
+      decoration: const InputDecoration(labelText: 'Income Category',hoverColor: Colors.black,fillColor: Colors.black,focusColor: Colors.black),
       maxLength: 15,
       style: const TextStyle(
-          color: Colors.white
+          color: Colors.black
       ),
       validator: (String? value) {
         if (value!.isEmpty) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_management/db/database_transaction.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Expenses extends StatefulWidget {
@@ -9,13 +10,31 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
+  Map<String, double> totalData = {};
 
-  List<_ExpenseData> data = [
-    _ExpenseData('Jan', 5),
-    _ExpenseData('Feb', 20),
-    _ExpenseData('Mar', 14),
-    _ExpenseData('Apr', 32),
-    _ExpenseData('May', 24)
+  DatabaseHandler handler = DatabaseHandler();
+
+  @override
+  void initState() {
+    super.initState();
+
+    handler = DatabaseHandler();
+    handler.initializeDB().whenComplete(() async {
+      totalData = await handler.retrieveWithCategory("expense");
+      debugPrint('$totalData');
+      for(int i = 0; i < totalData.length; i++){
+        pieData.add(_PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
+      }
+      setState(() {});
+    });
+  }
+
+  List<_PieData> pieData = [
+    // _PieData('Jan', 5,'card'),
+    // _PieData('Feb', 20,'food'),
+    // _PieData('Mar', 14,'dress'),
+    // _PieData('Apr', 32,'expenditure'),
+    // _PieData('May', 24,'shelter')
   ];
 
 
@@ -23,31 +42,39 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF020925),
-      body: Column(children: [
-          //Initialize the chart widget
-          SfCartesianChart(
-          primaryXAxis: CategoryAxis(),
-      // Chart title
-      title: ChartTitle(text: 'Expense analysis'),
-      // Enable legend
-      legend: Legend(isVisible: true),
-      // Enable tooltip
-      tooltipBehavior: TooltipBehavior(enable: true),
-      series: <ChartSeries<_ExpenseData, String>>[
-        LineSeries<_ExpenseData, String>(
-          dataSource: data,
-          xValueMapper: (_ExpenseData expense, _) => expense.year,
-          yValueMapper: (_ExpenseData expense, _) => expense.expense,
-          name: 'Expense',
-          // Enable data label
-          dataLabelSettings: const DataLabelSettings(isVisible: true),),
-      ],),
-    ]));
+      body: Column(
+        children: [
+          Center(
+              child: pieData.isNotEmpty ?
+              SfCircularChart(
+                  title: ChartTitle(text: 'Sales by sales person'),
+                  legend: Legend(isVisible: true,backgroundColor: Colors.white),
+                  series: <PieSeries<_PieData, String>>[
+                    PieSeries<_PieData, String>(
+                        explode: true,
+                        explodeIndex: 0,
+                        dataSource: pieData,
+                        xValueMapper: (_PieData data, _) => data.xData,
+                        yValueMapper: (_PieData data, _) => data.yData,
+                        dataLabelMapper: (_PieData data, _) => "${data.yData}",
+                        dataLabelSettings: const DataLabelSettings(isVisible: true)),
+                  ]
+              ) :
+              Container(
+                padding: const EdgeInsets.only(top: 100),
+                child: const Center(
+                  child: Text("No data available!!", style: TextStyle(color: Colors.white,fontSize: 20),),
+                ),
+              ),
+          ),
+        ],
+      ),
+    );
   }
 }
-class _ExpenseData {
-  _ExpenseData(this.year, this.expense);
 
-  final String year;
-  final double expense;
+class _PieData {
+  _PieData(this.xData, this.yData);
+  final String xData;
+  final num yData;
 }

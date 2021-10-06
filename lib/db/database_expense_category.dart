@@ -81,5 +81,8 @@ class DatabaseHandlerExpenseCategory {
     }
     return expenseCate;
   }
-
+  Future<void> deleteDb() async {
+    final db = await initializeDB();
+    await db.rawQuery("delete from expenseCategories");
+  }
 }

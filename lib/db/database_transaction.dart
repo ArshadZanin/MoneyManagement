@@ -121,4 +121,143 @@ class DatabaseHandler {
     return expense;
   }
 
+  Future<String?> calculateAssetsTotal() async {
+    String assets;
+    var dbClient = await initializeDB();
+    var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE account = 'Assets'");
+    var listResult = result[0].values.toList();
+    if(listResult[0].toString() == null){
+      assets= "0";
+    }else {
+      assets = listResult[0].toString();
+    }
+    return assets;
+  }
+
+  Future<String?> calculateLiabilitiesTotal() async {
+    String liabilities;
+    var dbClient = await initializeDB();
+    var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE account = 'Liabilities'");
+    var listResult = result[0].values.toList();
+    if(listResult[0].toString() == null){
+      liabilities= "0";
+    }else {
+      liabilities = listResult[0].toString();
+    }
+    return liabilities;
+  }
+
+  Future<void> deleteDb() async {
+    final db = await initializeDB();
+    await db.rawQuery("delete from users");
+  }
+
+  Future<Map<String, double>> retrieveWithCategory(String trans) async {
+    String? amount;
+    final Database db = await initializeDB();
+    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    Set<String> categorySet = {};
+    for(int i = 0; i < categoryList.length; i++){
+      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+      categorySet.add(data);
+    }
+    List<String> listCategory = [...categorySet.toList()];
+    Map<String, double> categoryAmount = {};
+
+    for(int i = 0; i < listCategory.length; i++){
+      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}'");
+      var listResult = queryResult[0].values.toList();
+      if(listResult[0].toString() == null){
+        amount= "0";
+      }else {
+        amount = listResult[0].toString();
+      }
+      double amountLast = double.parse(amount);
+      categoryAmount.addAll({listCategory[i]: amountLast});
+    }
+    return categoryAmount;
+  }
+
+  Future<Map<String, double>> retrieveWithCategoryToday(String trans,String date) async {
+    String? amount;
+    final Database db = await initializeDB();
+    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    Set<String> categorySet = {};
+    for(int i = 0; i < categoryList.length; i++){
+      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+      categorySet.add(data);
+    }
+    List<String> listCategory = [...categorySet.toList()];
+    Map<String, double> categoryAmount = {};
+
+    for(int i = 0; i < listCategory.length; i++){
+      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date = '$date'");
+      debugPrint("$queryResult");
+      var listResult = queryResult[0].values.toList();
+      if(listResult[0].toString() == null){
+        amount= "0";
+      }else {
+        amount = listResult[0].toString();
+      }
+      double amountLast = double.parse(amount);
+      categoryAmount.addAll({listCategory[i]: amountLast});
+    }
+    return categoryAmount;
+  }
+
+  Future<Map<String, double>> retrieveWithCategoryYear(String trans,String date) async {
+    String? amount;
+    final Database db = await initializeDB();
+    debugPrint(date);
+    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    debugPrint(date);
+    debugPrint("category list: $categoryList");
+    Set<String> categorySet = {};
+    for(int i = 0; i < categoryList.length; i++){
+      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+      categorySet.add(data);
+    }
+    List<String> listCategory = [...categorySet.toList()];
+    Map<String, double> categoryAmount = {};
+
+    for(int i = 0; i < listCategory.length; i++){
+      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '%$date'");
+      var listResult = queryResult[0].values.toList();
+      if(listResult[0].toString() == null){
+        amount= "0";
+      }else {
+        amount = listResult[0].toString();
+      }
+      double amountLast = double.parse(amount);
+      categoryAmount.addAll({listCategory[i]: amountLast});
+    }
+    return categoryAmount;
+  }
+
+  Future<Map<String, double>> retrieveWithCategoryMonth(String trans,String month,String year) async {
+    String? amount;
+    final Database db = await initializeDB();
+    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    Set<String> categorySet = {};
+    for(int i = 0; i < categoryList.length; i++){
+      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+      categorySet.add(data);
+    }
+    List<String> listCategory = [...categorySet.toList()];
+    Map<String, double> categoryAmount = {};
+
+    for(int i = 0; i < listCategory.length; i++){
+      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '$month%' and date LIKE '%$year'");
+      var listResult = queryResult[0].values.toList();
+      if(listResult[0].toString() == null){
+        amount= "0";
+      }else {
+        amount = listResult[0].toString();
+      }
+      double amountLast = double.parse(amount);
+      categoryAmount.addAll({listCategory[i]: amountLast});
+    }
+    return categoryAmount;
+  }
+
 }
