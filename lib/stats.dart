@@ -19,7 +19,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
   late final _dateMonth = DateFormat('MMM').format(DateTime.now());
 
   TabController? controller;
-  String _value = "Monthly";
+  String _value = "Today";
 
   void _value1(String value) {
     setState(() {

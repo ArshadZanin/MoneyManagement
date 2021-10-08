@@ -182,25 +182,32 @@ class DatabaseHandler {
     String? amount;
     final Database db = await initializeDB();
     List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    debugPrint('$categoryList');
     Set<String> categorySet = {};
     for(int i = 0; i < categoryList.length; i++){
       String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
       categorySet.add(data);
+      debugPrint(data);
     }
     List<String> listCategory = [...categorySet.toList()];
+    debugPrint("$listCategory");
     Map<String, double> categoryAmount = {};
 
     for(int i = 0; i < listCategory.length; i++){
+      debugPrint("Category first: ${listCategory[i]}");
       final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date = '$date'");
-      debugPrint("$queryResult");
+      debugPrint("map result: $queryResult");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString() == null){
+      if(listResult[0].toString().isEmpty){
         amount= "0";
       }else {
         amount = listResult[0].toString();
       }
+      debugPrint("amount: $amount");
       double amountLast = double.parse(amount);
+      debugPrint("$amountLast");
       categoryAmount.addAll({listCategory[i]: amountLast});
+      debugPrint("Category second: ${listCategory[i]}");
     }
     return categoryAmount;
   }
@@ -223,7 +230,7 @@ class DatabaseHandler {
     for(int i = 0; i < listCategory.length; i++){
       final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '%$date'");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString() == null){
+      if(listResult[0].toString().isEmpty){
         amount= "0";
       }else {
         amount = listResult[0].toString();
@@ -249,7 +256,7 @@ class DatabaseHandler {
     for(int i = 0; i < listCategory.length; i++){
       final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '$month%' and date LIKE '%$year'");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString() == null){
+      if(listResult[0].toString().isEmpty){
         amount= "0";
       }else {
         amount = listResult[0].toString();
