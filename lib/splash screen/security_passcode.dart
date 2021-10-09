@@ -16,7 +16,7 @@ class _SecurityPasscodeState extends State<SecurityPasscode> {
 
 
   int count = 0;
-  String passcode = "";
+  String passcode = "0000";
   bool check = false;
   String passcodeFromDb = "";
 
