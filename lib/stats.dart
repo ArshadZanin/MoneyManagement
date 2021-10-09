@@ -234,7 +234,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
               Center(
                 child: pieData1().isNotEmpty ?
                 SfCircularChart(
-                        title: ChartTitle(text: 'Amounts by Category'),
+                        title: ChartTitle(text: 'Income Stats by category'),
                         legend: Legend(
                             isVisible: true, backgroundColor: Colors.white),
                         series: <PieSeries<_PieData, String>>[
@@ -254,7 +254,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                         child: const Center(
                           child: Text(
                             "No data available!!",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                         ),
                       ),
@@ -270,7 +270,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
               Center(
                 child: pieData2().isNotEmpty ?
                 SfCircularChart(
-                        title: ChartTitle(text: 'Sales by sales person'),
+                        title: ChartTitle(text: 'Expense Stats by category'),
                         legend: Legend(
                             isVisible: true, backgroundColor: Colors.white),
                         series: <PieSeries<_PieData, String>>[
@@ -290,7 +290,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                         child: const Center(
                           child: Text(
                             "No data available!!",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                         ),
                       ),

@@ -74,22 +74,25 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       ),
       floatingActionButtonLocation:
       FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: app_color.widget,
-        child: const Center(
-          child: Icon(
-            Icons.add,
-            color: Colors.black,
-            size: 32.0,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: FloatingActionButton(
+          backgroundColor: app_color.widget,
+          child: const Center(
+            child: Icon(
+              Icons.add,
+              color: Colors.black,
+              size: 32.0,
+            ),
           ),
-        ),
-        onPressed: () {
-          debugPrint("Add Data Clicked");
-          Navigator.push(context, MaterialPageRoute(builder: (_) => const AddTrans()));
-        },
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.0),
+          onPressed: () {
+            debugPrint("Add Data Clicked");
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+          },
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(20.0),
+            ),
           ),
         ),
       ),

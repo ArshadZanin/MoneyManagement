@@ -5,6 +5,7 @@ import 'package:money_management/db/database_expense_category.dart';
 import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:money_management/home.dart';
+import 'package:money_management/splash%20screen/splash_screen.dart';
 import '../main.dart';
 import 'package:money_management/color/app_color.dart' as app_color;
 
@@ -146,7 +147,7 @@ class _AddTransState extends State<AddTrans> {
       ),
       validator: (String? value) {
         if (value!.isEmpty) {
-          return 'Name is Required';
+          return 'Category is Required';
         }
 
         return null;
@@ -168,7 +169,7 @@ class _AddTransState extends State<AddTrans> {
       ),
       validator: (String? value) {
         if (value!.isEmpty) {
-          return 'Name is Required';
+          return 'Category is Required';
         }
 
         return null;
@@ -502,62 +503,66 @@ class _AddTransState extends State<AddTrans> {
                            debugPrint("blue Clicked");
                            showModalBottomSheet(
                              context: context,
-                               builder: (BuildContext context) => Container(
-                                 alignment: Alignment.center,
-                                 height: 200,
-                                 child: Form(
-                                   key: _formKey1,
-                                   child: Column(
-                                     children: [
-                                       Container(
-                                         decoration: BoxDecoration(
-                                           borderRadius: BorderRadius.circular(20),
-                                           color: Colors.white,
-                                         ),
-                                         padding: const EdgeInsets.all(20),
-                                         child: Column(
-                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                           children: [
-                                             _buildItem(),
-                                           ],
-                                         ),
-                                       ),
-                                       const SizedBox(height: 20,),
-                                       Center(
-                                         child: FlatButton(
-                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                           color: Colors.red,
-                                           padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
-                                           onPressed: () async {
-                                             debugPrint("clicked");
-                                             if(!_formKey1.currentState!.validate()) {
-                                               return;
-                                             }
-
-                                             _formKey1.currentState!.save();
-                                             debugPrint("saved");
-                                             IncomeCategoryDb user = IncomeCategoryDb(incomeCategory: _incomeCategory);
-
-                                             List<IncomeCategoryDb> listofIncomeCategoryDb = [user];
-
-                                             DatabaseHandlerIncomeCategory db = DatabaseHandlerIncomeCategory();
-
-                                             await db.insertIncomeCategory(listofIncomeCategoryDb);
-
-                                             debugPrint("insert");
-                                             Navigator.pop(context);
-                                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AddTrans()));
-
-
-                                             debugPrint("completed");
-                                           },
-                                           child: const Text(
-                                             "Save",
-                                             style: TextStyle(color: Colors.white),
+                               builder: (BuildContext context) => Padding(
+                                   padding: EdgeInsets.only(
+                                       bottom: MediaQuery.of(context).viewInsets.bottom),
+                                 child: Container(
+                                   alignment: Alignment.center,
+                                   height: 150,
+                                   child: Form(
+                                     key: _formKey1,
+                                     child: Column(
+                                       children: [
+                                         Container(
+                                           decoration: BoxDecoration(
+                                             borderRadius: BorderRadius.circular(20),
+                                             color: Colors.white,
+                                           ),
+                                           padding: const EdgeInsets.symmetric(horizontal: 20),
+                                           child: Column(
+                                             crossAxisAlignment: CrossAxisAlignment.start,
+                                             children: [
+                                               _buildItem(),
+                                             ],
                                            ),
                                          ),
-                                       ),
-                                     ],
+                                         const SizedBox(height: 0,),
+                                         Center(
+                                           child: FlatButton(
+                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                             color: Colors.red,
+                                             padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
+                                             onPressed: () async {
+                                               debugPrint("clicked");
+                                               if(!_formKey1.currentState!.validate()) {
+                                                 return;
+                                               }
+
+                                               _formKey1.currentState!.save();
+                                               debugPrint("saved");
+                                               IncomeCategoryDb user = IncomeCategoryDb(incomeCategory: _incomeCategory);
+
+                                               List<IncomeCategoryDb> listofIncomeCategoryDb = [user];
+
+                                               DatabaseHandlerIncomeCategory db = DatabaseHandlerIncomeCategory();
+
+                                               await db.insertIncomeCategory(listofIncomeCategoryDb);
+
+                                               debugPrint("insert");
+                                               Navigator.pop(context);
+                                               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+
+
+                                               debugPrint("completed");
+                                             },
+                                             child: const Text(
+                                               "Save",
+                                               style: TextStyle(color: Colors.white),
+                                             ),
+                                           ),
+                                         ),
+                                       ],
+                                     ),
                                    ),
                                  ),
                                )
@@ -572,17 +577,18 @@ class _AddTransState extends State<AddTrans> {
                                context: context,
                                builder: (BuildContext context) => Container(
                                  alignment: Alignment.center,
-                                 height: 200,
+                                 height: 180,
                                  child: Form(
                                    key: _formKey2,
                                    child: Column(
                                      children: [
                                        Container(
+                                         height:50,
                                          decoration: BoxDecoration(
                                            borderRadius: BorderRadius.circular(20),
                                            color: Colors.white,
                                          ),
-                                         padding: const EdgeInsets.all(20),
+                                         padding: const EdgeInsets.only(left: 50,right: 50),
                                          child: Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                            children: [
@@ -678,7 +684,7 @@ class _AddTransState extends State<AddTrans> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MyHomePage(),
+                          builder: (context) => const HomePageAssist(),
                         ),
                       );
                     },

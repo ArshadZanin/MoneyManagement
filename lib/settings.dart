@@ -6,6 +6,8 @@ import 'package:money_management/settings/configure.dart';
 import 'package:money_management/settings/help.dart';
 import 'package:money_management/color/app_color.dart' as app_color;
 
+import 'db/database_passcode.dart';
+
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -101,6 +103,10 @@ class _SettingsState extends State<Settings> {
                               DatabaseHandlerExpenseCategory db2 = DatabaseHandlerExpenseCategory();
                               await db2.insertExpenseCategory(listofExpenseCategoryDb);
 
+                              PasscodeDb user3 = PasscodeDb(passcode: '0000', checks: "false");
+                              List<PasscodeDb> listofPasscodeDb = [user3];
+                              DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
+                              await db3.insertPasscode(listofPasscodeDb);
                               Navigator.pop(context, 'OK');
                               },
                             child: const Text('OK',style: TextStyle(color: Colors.red),),

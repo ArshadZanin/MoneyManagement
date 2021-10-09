@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'db/database_transaction.dart';
 import 'package:money_management/color/app_color.dart' as app_color;
+import 'package:money_management/settings/configure.dart';
 
 
 
@@ -26,7 +27,7 @@ class _TransactionState extends State<Transaction> {
   final _dateController = TextEditingController(text: DateFormat('MMM dd, yyyy').format(DateTime.now()));
 
   DatabaseHandler handler = DatabaseHandler();
-
+  
   @override
   void initState() {
     super.initState();
@@ -282,11 +283,11 @@ class _TransactionState extends State<Transaction> {
               ],
             ),
             const SizedBox(
-              height: 4,
+              height: 20,
             ),
             const Text(
               "Transactions",
-              style: TextStyle(color: app_color.text),
+              style: TextStyle(color: app_color.text,fontSize: 15),
             ),
             const SizedBox(
               height: 4,
@@ -343,7 +344,7 @@ class _TransactionState extends State<Transaction> {
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () async {
-                                          Navigator.pop(context, 'go back');
+                                          Navigator.pop(context, 'Go Back');
                                         },
                                         child: const Text('go back',style: TextStyle(color: Colors.blue),),
                                       ),

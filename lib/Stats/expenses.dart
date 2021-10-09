@@ -63,7 +63,7 @@ class _ExpensesState extends State<Expenses> {
               Container(
                 padding: const EdgeInsets.only(top: 100),
                 child: const Center(
-                  child: Text("No data available!!", style: TextStyle(color: Colors.white,fontSize: 20),),
+                  child: Text("No data available!!", style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
               ),
           ),

@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      checkerboardOffscreenLayers: true,
       debugShowCheckedModeBanner: false,
       title: 'Money Management',
       theme: ThemeData(

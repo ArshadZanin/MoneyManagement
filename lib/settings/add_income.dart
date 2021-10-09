@@ -39,7 +39,7 @@ class _AddIncomeDataState extends State<AddIncomeData> {
       ),
       validator: (String? value) {
         if (value!.isEmpty) {
-          return 'Name is Required';
+          return 'Category is Required';
         }
 
         return null;

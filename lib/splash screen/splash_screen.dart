@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/home.dart';
+import 'package:money_management/splash%20screen/security_passcode.dart';
 
 class SplashScreen1 extends StatefulWidget {
   const SplashScreen1({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class _SplashScreen1State extends State<SplashScreen1> {
               width: 220,
               child: Center(
                 child: Text(
-                  'View Splash Animation',
+                  'Splash Animation',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -92,7 +94,7 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
     Timer(const Duration(seconds: 4), () {
       setState(() {
         Navigator.pushReplacement(
-            context, PageTransition1(const MyHomePage()));
+            context, PageTransition1(const SplashScreen1SubHome()));
       });
     });
   }
@@ -122,7 +124,7 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
                 duration: const Duration(milliseconds: 1000),
                 opacity: _textOpacity,
                 child: Text(
-                  'YOUR APP\'S NAME',
+                  'Money Management',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -148,9 +150,7 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
                   borderRadius: BorderRadius.circular(30),
                 ),
                 // child: Image.asset('assets/images/file_name.png')
-                child: const Text(
-                  'APP LOGO',
-                ),
+                child: Icon(Icons.money),
               ),
             ),
           ),
@@ -184,26 +184,55 @@ class PageTransition1 extends PageRouteBuilder {
   );
 }
 
-// class SplashScreen1SubHome extends StatelessWidget {
-//   const SplashScreen1SubHome({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         brightness: Brightness.dark,
-//         backgroundColor: Colors.deepPurple,
-//         centerTitle: true,
-//         title: const Text(
-//           'APP NAME',
-//           style: TextStyle(
-//             color: Colors.white,
-//             fontWeight: FontWeight.bold,
-//             fontSize: 20,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class SplashScreen1SubHome extends StatefulWidget {
+  const SplashScreen1SubHome({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen1SubHome> createState() => _SplashScreen1SubHomeState();
+}
+
+class _SplashScreen1SubHomeState extends State<SplashScreen1SubHome> {
+
+  DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
+
+  bool? check = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    handler = DatabaseHandlerPasscode();
+    handler.initializeDB().whenComplete(() async {
+      check = (await handler.retrieveCheck())!;
+      debugPrint("$check");
+      // await this.addUsers();
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body:
+      check == true ?
+          const SecurityPasscode() :
+      const MyHomePage(),
+    );
+  }
+}
+class HomePageAssist extends StatelessWidget {
+  const HomePageAssist({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Money Management',
+      theme: ThemeData(
+        fontFamily: 'Saira',
+        primarySwatch: Colors.red,
+      ),
+      home: const MyHomePage(),
+    );
+  }
+}
