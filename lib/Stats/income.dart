@@ -71,7 +71,7 @@ class _IncomeState extends State<Income> {
           Center(
               child: pieData.isNotEmpty ?
               SfCircularChart(
-                  title: ChartTitle(text: 'Amounts by Category'),
+                  title: ChartTitle(text: 'Income Stats by category'),
                   legend: Legend(isVisible: true,backgroundColor: Colors.white),
                   series: <PieSeries<_PieData, String>>[
                     PieSeries<_PieData, String>(
@@ -87,7 +87,7 @@ class _IncomeState extends State<Income> {
                   Container(
                     padding: const EdgeInsets.only(top: 100),
                     child: const Center(
-                      child: Text("No data available!!", style: TextStyle(color: Colors.white,fontSize: 20),),
+                      child: Text("No data available!!", style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
                   ),
           ),

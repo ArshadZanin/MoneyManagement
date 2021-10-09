@@ -1,9 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management/db/database_expense_category.dart';
 import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/db/database_transaction.dart';
+import 'package:money_management/home.dart';
 import '../main.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 
 
@@ -11,13 +15,28 @@ class AddTrans extends StatefulWidget {
   final User? student;
   final int? studentIndex;
 
-  const AddTrans({this.student, this.studentIndex});
+  final IncomeCategoryDb? user;
+  final int? userIndex;
+
+  final ExpenseCategoryDb? user1;
+  final int? userIndex1;
+
+
+  const AddTrans({this.student, this.studentIndex,this.user,this.userIndex,this.user1,this.userIndex1});
+
 
   @override
   _AddTransState createState() => _AddTransState();
 }
 
 class _AddTransState extends State<AddTrans> {
+
+  String? _incomeCategory;
+  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
+
+  String? _expenseCategory;
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+
   int section = 0;
 
   late var _saveDate = DateFormat('MMM dd, yyyy').format(DateTime.now());
@@ -49,6 +68,12 @@ class _AddTransState extends State<AddTrans> {
   @override
   void initState() {
     super.initState();
+    if (widget.user1 != null) {
+      _expenseCategory = widget.user1!.expenseCategory;
+    }
+    if (widget.user != null) {
+      _incomeCategory = widget.user!.incomeCategory;
+    }
     incomeCate ??= ['Cash'];
     expenseCate ??= ['Food'];
     handler = DatabaseHandler();
@@ -93,7 +118,7 @@ class _AddTransState extends State<AddTrans> {
     handlerExpense = DatabaseHandlerExpenseCategory();
     handlerExpense.initializeDB().whenComplete(() async {
       List expenseCate12 = await handlerExpense.listExpenseCategory();
-      if(expenseCate12 == null){
+      if(expenseCate12.isEmpty){
         expenseCate12.add("Cash");
       }
       else{
@@ -111,8 +136,53 @@ class _AddTransState extends State<AddTrans> {
     });
   }
 
+  Widget _buildItem(){
+    return TextFormField(
+      initialValue: _incomeCategory,
+      decoration: const InputDecoration(labelText: 'Income Category',hoverColor: Colors.black,fillColor: Colors.black,focusColor: Colors.black),
+      maxLength: 15,
+      style: const TextStyle(
+          color: Colors.black
+      ),
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return 'Name is Required';
+        }
+
+        return null;
+      },
+      onSaved: (String? value) {
+        _incomeCategory = value;
+      },
+      textAlign: TextAlign.left,
+    );
+  }
+
+  Widget _buildItem1(){
+    return TextFormField(
+      initialValue: _expenseCategory,
+      decoration: const InputDecoration(labelText: 'Expense Category',hoverColor: Colors.black,fillColor: Colors.black,focusColor: Colors.black),
+      maxLength: 15,
+      style: const TextStyle(
+          color: Colors.black
+      ),
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return 'Name is Required';
+        }
+
+        return null;
+      },
+      onSaved: (String? value) {
+        _expenseCategory = value;
+      },
+      textAlign: TextAlign.left,
+    );
+  }
+
+
   final _dateController = TextEditingController(text: DateFormat('MMM dd, yyyy').format(DateTime.now()));
-  Widget _buildDate() {
+  Widget _buildDate(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: TextFormField(
@@ -153,27 +223,29 @@ class _AddTransState extends State<AddTrans> {
       child: Row(
         children: [
           const Text("Account:\t\t"),
-          DropdownButton(
-            items: <String>['Assets', 'Liabilities']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            value: _account,
-            onChanged: (String? newValue) {
-              setState(() {
-                _account = newValue!;
-              });
-            },
-            icon: const Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 0,
-            style: const TextStyle(color: Colors.black),
-            underline: Container(
-              height: 2,
-              color: Colors.black,
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              items: <String>['Assets', 'Liabilities']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              value: _account,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _account = newValue!;
+                });
+              },
+              icon: const Icon(Icons.arrow_drop_down),
+              iconSize: 24,
+              elevation: 0,
+              style: const TextStyle(color: Colors.black),
+              underline: Container(
+                height: 2,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
@@ -187,28 +259,30 @@ class _AddTransState extends State<AddTrans> {
       child: Row(
         children: [
           const Text("Category:\t\t"),
-          DropdownButton(
-            hint: const Text("<select>"),
-            items: incomeCategory
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            value: _category,
-            onChanged: (String? newValue) {
-              setState(() {
-                _category = newValue!;
-              });
-            },
-            icon: const Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 0,
-            style: const TextStyle(color: Colors.black),
-            underline: Container(
-              height: 2,
-              color: Colors.black,
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              hint: const Text("<select>"),
+              items: incomeCategory
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              value: _category,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _category = newValue!;
+                });
+              },
+              icon: const Icon(Icons.arrow_drop_down),
+              iconSize: 24,
+              elevation: 0,
+              style: const TextStyle(color: Colors.black),
+              underline: Container(
+                height: 2,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
@@ -222,28 +296,30 @@ class _AddTransState extends State<AddTrans> {
       child: Row(
         children: [
           const Text("Category:\t\t"),
-          DropdownButton(
-            hint: const Text("<select>"),
-            items: expenseCategory
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            value: _category,
-            onChanged: (String? newValue) {
-              setState(() {
-                _category = newValue!;
-              });
-            },
-            icon: const Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 0,
-            style: const TextStyle(color: Colors.black),
-            underline: Container(
-              height: 2,
-              color: Colors.black,
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              hint: const Text("<select>"),
+              items: expenseCategory
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              value: _category,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _category = newValue!;
+                });
+              },
+              icon: const Icon(Icons.arrow_drop_down),
+              iconSize: 24,
+              elevation: 0,
+              style: const TextStyle(color: Colors.black),
+              underline: Container(
+                height: 2,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
@@ -295,23 +371,26 @@ class _AddTransState extends State<AddTrans> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: Colors.indigo,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 0.2,
         title: Text(
           section == 0 ? "Income" : "Expense",
           style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF13254C),
+        backgroundColor: Colors.indigo,
       ),
       body: Container(
-        color: const Color(0xFF13254C),
+        color: app_color.back,
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               section == 0
                   ? FlatButton(
+                      splashColor: Colors.white,
+                      hoverColor: Colors.white,
+                      focusColor: Colors.white,
                       onPressed: () {
                         setState(() {
                           _category = '<select>';
@@ -331,6 +410,9 @@ class _AddTransState extends State<AddTrans> {
                       ),
                     )
                   : FlatButton(
+                splashColor: Colors.white,
+                hoverColor: Colors.white,
+                focusColor: Colors.white,
                       onPressed: () {
                         setState(() {
                           _category = '<select>';
@@ -351,6 +433,9 @@ class _AddTransState extends State<AddTrans> {
                     ),
               section != 0
                   ? FlatButton(
+                splashColor: Colors.white,
+                hoverColor: Colors.white,
+                focusColor: Colors.white,
                       onPressed: () {
                         setState(() {
                           _category = '<select>';
@@ -370,6 +455,9 @@ class _AddTransState extends State<AddTrans> {
                       ),
                     )
                   : FlatButton(
+                splashColor: Colors.white,
+                hoverColor: Colors.white,
+                focusColor: Colors.white,
                       onPressed: () {
                         setState(() {
                           _category = '<select>';
@@ -401,16 +489,155 @@ class _AddTransState extends State<AddTrans> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  _buildDate(),
+                  _buildDate(context),
                   _buildAccount(),
-                  section == 0 ?
-                  _buildCategory1() : _buildCategory2(),
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     section == 0 ?
+                     _buildCategory1() : _buildCategory2(),
+                     section == 0 ?
+                     IconButton(
+                         onPressed: (){
+                           debugPrint("blue Clicked");
+                           showModalBottomSheet(
+                             context: context,
+                               builder: (BuildContext context) => Container(
+                                 alignment: Alignment.center,
+                                 height: 200,
+                                 child: Form(
+                                   key: _formKey1,
+                                   child: Column(
+                                     children: [
+                                       Container(
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.circular(20),
+                                           color: Colors.white,
+                                         ),
+                                         padding: const EdgeInsets.all(20),
+                                         child: Column(
+                                           crossAxisAlignment: CrossAxisAlignment.start,
+                                           children: [
+                                             _buildItem(),
+                                           ],
+                                         ),
+                                       ),
+                                       const SizedBox(height: 20,),
+                                       Center(
+                                         child: FlatButton(
+                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                           color: Colors.red,
+                                           padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
+                                           onPressed: () async {
+                                             debugPrint("clicked");
+                                             if(!_formKey1.currentState!.validate()) {
+                                               return;
+                                             }
+
+                                             _formKey1.currentState!.save();
+                                             debugPrint("saved");
+                                             IncomeCategoryDb user = IncomeCategoryDb(incomeCategory: _incomeCategory);
+
+                                             List<IncomeCategoryDb> listofIncomeCategoryDb = [user];
+
+                                             DatabaseHandlerIncomeCategory db = DatabaseHandlerIncomeCategory();
+
+                                             await db.insertIncomeCategory(listofIncomeCategoryDb);
+
+                                             debugPrint("insert");
+                                             Navigator.pop(context);
+                                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+
+
+                                             debugPrint("completed");
+                                           },
+                                           child: const Text(
+                                             "Save",
+                                             style: TextStyle(color: Colors.white),
+                                           ),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                               )
+                           );
+                           },
+                         icon: const Icon(Icons.add,color: Colors.blue,))
+                         :
+                     IconButton(
+                         onPressed: (){
+                           debugPrint("red Clicked");
+                           showModalBottomSheet(
+                               context: context,
+                               builder: (BuildContext context) => Container(
+                                 alignment: Alignment.center,
+                                 height: 200,
+                                 child: Form(
+                                   key: _formKey2,
+                                   child: Column(
+                                     children: [
+                                       Container(
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.circular(20),
+                                           color: Colors.white,
+                                         ),
+                                         padding: const EdgeInsets.all(20),
+                                         child: Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                           children: [
+                                             _buildItem1(),
+                                           ],
+                                         ),
+                                       ),
+                                       const SizedBox(height: 20,),
+                                       Center(
+                                         child: FlatButton(
+                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                           color: Colors.red,
+                                           padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
+                                           onPressed: () async {
+                                             debugPrint("Saved");
+                                             debugPrint("clicked");
+                                             if(!_formKey2.currentState!.validate()) {
+                                               return;
+                                             }
+
+                                             _formKey2.currentState!.save();
+                                             debugPrint("saved");
+                                             ExpenseCategoryDb user1 = ExpenseCategoryDb(expenseCategory: _expenseCategory);
+
+                                             List<ExpenseCategoryDb> listofExpenseCategoryDb = [user1];
+
+                                             DatabaseHandlerExpenseCategory db = DatabaseHandlerExpenseCategory();
+
+                                             await db.insertExpenseCategory(listofExpenseCategoryDb);
+                                             debugPrint("insert");
+                                             Navigator.pop(context);
+                                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+                                             debugPrint("completed");
+                                           },
+                                           child: const Text(
+                                             "Save",
+                                             style: TextStyle(color: Colors.white),
+                                           ),
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                               )
+                           );
+                           },
+                         icon: const Icon(Icons.add,color: Colors.red,)),
+                   ],
+                 ),
                   _buildAmount(),
                   _buildNote(),
                   RaisedButton(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 15),
-                    color: Colors.red,
+                    color: Colors.indigo,
                     child: const Text(
                       'Save',
                       style: TextStyle(
@@ -451,7 +678,7 @@ class _AddTransState extends State<AddTrans> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MyApp(),
+                          builder: (context) => const MyHomePage(),
                         ),
                       );
                     },

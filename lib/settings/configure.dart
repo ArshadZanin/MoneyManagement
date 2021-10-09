@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money_management/db/database_reminder.dart';
+import 'package:money_management/home.dart';
 import 'package:money_management/main.dart';
 import 'package:money_management/settings/expense_category.dart';
 import 'package:money_management/settings/income_category.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 
 class Configure extends StatefulWidget {
@@ -116,7 +119,7 @@ class _ConfigureState extends State<Configure> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -133,19 +136,19 @@ class _ConfigureState extends State<Configure> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: (){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MyApp()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MyHomePage()));
           },
         ),
       ),
       body: Column(
         children: [
           const SizedBox(height: 5,),
-          const Text("Category",style: TextStyle(color: Colors.white54,fontSize: 15),),
+          const Text("Category",style: TextStyle(color: Colors.black,fontSize: 15),),
           const SizedBox(height: 5,),
           Container(
             padding: const EdgeInsets.all(20),
             width: MediaQuery.of(context).size.width,
-            color: const Color(0xFF13254C),
+            color: app_color.widget,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -154,14 +157,14 @@ class _ConfigureState extends State<Configure> {
                       debugPrint("Income Category Settings");
                       Navigator.push(context, MaterialPageRoute(builder: (_) => const IncomeCategory()));
                     },
-                    child: const Text("Income Category Settings",style: TextStyle(color: Colors.white,fontSize: 17),),
+                    child: const Text("Income Category Settings",style: TextStyle(color: app_color.text,fontSize: 17),),
                 ),
                 TextButton(
                   onPressed: (){
                     debugPrint("Expenses Category Settings");
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const ExpenseCategory()));
                   },
-                  child: const Text("Expenses Category Settings",style: TextStyle(color: Colors.white,fontSize: 17),),
+                  child: const Text("Expenses Category Settings",style: TextStyle(color: app_color.text,fontSize: 17),),
                 ),
               ],
             ),
@@ -170,24 +173,18 @@ class _ConfigureState extends State<Configure> {
           Container(
             padding: const EdgeInsets.all(20),
             width: MediaQuery.of(context).size.width,
-            color: const Color(0xFF13254C),
+            color: app_color.widget,
             child: Column(
               children: [
                 SwitchListTile(
-                  inactiveTrackColor: Colors.blue,
-                  inactiveThumbColor: Colors.blueGrey[800],
-                  activeTrackColor: Colors.blueGrey[800],
-                  title: const Text("App Lock", style: TextStyle(color: Colors.white,fontSize: 20)),
+                  title: const Text("App Lock", style: TextStyle(color: app_color.text,fontSize: 20)),
                   value: finger,
                   onChanged: (bool newValue) => setState(() {
                     finger == false ? finger = true : finger = false;
                   }),
                 ),
                 SwitchListTile(
-                  inactiveTrackColor: Colors.blue,
-                  inactiveThumbColor: Colors.blueGrey[800],
-                  activeTrackColor: Colors.blueGrey[800],
-                  title: const Text("Set Reminder?", style: TextStyle(color: Colors.white,fontSize: 20)),
+                  title: const Text("Set Reminder?", style: TextStyle(color: app_color.text,fontSize: 20)),
                   value: reminder!,
                   onChanged: (bool newValue) async {
                     handler = DatabaseHandlerTime();
@@ -210,7 +207,7 @@ class _ConfigureState extends State<Configure> {
                    },
                 ),
                 reminder == true ? FlatButton(
-                  color: const Color(0xFF13254C),
+                  color: app_color.widget,
                     onPressed: () async {
                     debugPrint("reminder");
                     _selectTime();
@@ -220,9 +217,9 @@ class _ConfigureState extends State<Configure> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                      const Text("Time?",style: TextStyle(color: Colors.white,fontSize: 20),),
+                      const Text("Time?",style: TextStyle(color: app_color.text,fontSize: 20),),
                       const SizedBox(width: 10,),
-                      Text(dates!,style: const TextStyle(color: Colors.white54,fontSize: 20),)
+                      Text(dates!,style: const TextStyle(color: app_color.text,fontSize: 20),)
                     ],),
                 ) :
                 Container(),

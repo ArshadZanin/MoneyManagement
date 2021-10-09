@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_management/db/database_expense_category.dart';
-
+import 'package:money_management/color/app_color.dart' as app_color;
 import 'expense_category.dart';
 
 class AddExpenseData extends StatefulWidget {
@@ -55,7 +55,7 @@ class _AddExpenseDataState extends State<AddExpenseData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xFF020925),

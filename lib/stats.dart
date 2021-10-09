@@ -4,6 +4,8 @@ import 'package:money_management/Stats/income.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 class Stats extends StatefulWidget {
   const Stats({Key? key}) : super(key: key);
@@ -158,13 +160,20 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
         title: _textTitle(),
-        backgroundColor: const Color(0xFF13254C),
+        titleTextStyle: const TextStyle(color: Colors.black),
+        backgroundColor: app_color.widget,
         actions: [
           DropdownButtonHideUnderline(
             child: ButtonTheme(
+              buttonColor: Colors.black,
+              disabledColor: Colors.black,
+              focusColor: Colors.black,
+              highlightColor: Colors.black,
+              hoverColor: Colors.black,
+              splashColor: Colors.black,
               minWidth: 50,
               height: 20,
               alignedDropdown: true,
@@ -172,7 +181,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                 iconSize: 15,
                 value: _value,
                 borderRadius: BorderRadius.circular(10.0),
-                dropdownColor: Colors.blueGrey[900],
+                dropdownColor: Colors.grey,
                 items: <String>[
                   'Today',
                   // 'Weekly',
@@ -184,7 +193,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: app_color.text),
                     ),
                   );
                 }).toList(),
@@ -199,6 +208,8 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
           controller: controller,
           indicatorWeight: 2.0,
           indicatorPadding: const EdgeInsets.all(5.0),
+          unselectedLabelColor: Colors.black,
+          labelColor: Colors.red,
           indicatorColor: Colors.red[900],
           tabs: const [
             Tab(

@@ -47,7 +47,7 @@ class _ExpensesState extends State<Expenses> {
           Center(
               child: pieData.isNotEmpty ?
               SfCircularChart(
-                  title: ChartTitle(text: 'Sales by sales person'),
+                  title: ChartTitle(text: 'Expense Stats by category'),
                   legend: Legend(isVisible: true,backgroundColor: Colors.white),
                   series: <PieSeries<_PieData, String>>[
                     PieSeries<_PieData, String>(

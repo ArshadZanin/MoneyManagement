@@ -4,6 +4,8 @@ import 'package:money_management/transaction/add_transaction.dart';
 import 'package:money_management/settings.dart';
 import 'package:money_management/stats.dart';
 import 'package:money_management/transactions.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 
 class MyHomePage extends StatefulWidget {
@@ -33,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       body: TabBarView(
         controller: controller,
         children: const [
@@ -44,14 +46,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ],
       ),
       bottomNavigationBar: Container(
-        color: const Color(0xFF13254C),
+        color: app_color.widget,
         child: TabBar(
           controller: controller,
           indicatorWeight: 2.0,
           labelColor: Colors.red,
-          unselectedLabelColor: Colors.white,
+          unselectedLabelStyle: const TextStyle(backgroundColor: Colors.red),
+          unselectedLabelColor: Colors.grey,
           indicatorPadding: const EdgeInsets.all(5.0),
-          indicatorColor: const Color(0xFF13254C),
+          indicatorColor: const Color(0xFFFCC3C3),
           tabs: const [
             Tab(
               icon: Icon(Icons.compare_arrows),
@@ -72,10 +75,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       floatingActionButtonLocation:
       FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF13254C),
+        backgroundColor: app_color.widget,
         child: const Center(
           child: Icon(
             Icons.add,
+            color: Colors.black,
             size: 32.0,
           ),
         ),
@@ -85,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         },
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(22.0),
+            Radius.circular(20.0),
           ),
         ),
       ),

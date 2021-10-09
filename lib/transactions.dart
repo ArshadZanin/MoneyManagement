@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'db/database_transaction.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
 
 
 
@@ -52,70 +53,88 @@ class _TransactionState extends State<Transaction> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF020925),
+        backgroundColor: app_color.appBar,
         title: const Text(
           "Money Management",
-          style: TextStyle(color: Colors.white, letterSpacing: 1),
+          style: TextStyle(color: app_color.text, letterSpacing: 1),
         ),
-        elevation: 0,
+        centerTitle: true,
+        elevation: 0.2,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width - 12,
-              height: MediaQuery.of(context).size.height / 9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xFF13254C).withOpacity(1),
-              ),
-              child: Center(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding:
-                      EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+            const SizedBox(height: 10,),
+            Material(
+              elevation: 20,
+              shadowColor: const Color(0xff4700fd),
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                width: MediaQuery.of(context).size.width - 12,
+                height: MediaQuery.of(context).size.height / 9,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: app_color.widget,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    // Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
+                    colors: <Color>[
+                      Color(0xff4700fd),
+                      Color(0xff541ce5),
+                      Color(0xff6325ff)
+                    ], // red to yellow
+                    tileMode: TileMode.repeated, // repeats the gradient over the canvas
                   ),
-                  readOnly: true,
-                  keyboardType: TextInputType.none,
-                  controller: _dateController,
-                  onTap: () async {
-                    await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2015),
-                      lastDate: DateTime.now(),
-                    ).then((selectedDate) {
-                      if (selectedDate != null) {
-                        _dateController.text =
-                            DateFormat('MMM dd, yyyy').format(selectedDate);
-                        _date = _dateController.text;
-                        setState(() {
+                ),
+                child: Center(
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding:
+                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                    ),
+                    readOnly: true,
+                    keyboardType: TextInputType.none,
+                    controller: _dateController,
+                    onTap: () async {
+                      await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2015),
+                        lastDate: DateTime.now(),
+                      ).then((selectedDate) {
+                        if (selectedDate != null) {
+                          _dateController.text =
+                              DateFormat('MMM dd, yyyy').format(selectedDate);
+                          _date = _dateController.text;
+                          setState(() {
 
-                        });
+                          });
 
+                        }
+                      });
+                    },
+                    style: const TextStyle(fontSize: 15,color: Colors.white),
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Date is Required';
                       }
-                    });
-                  },
-                  style: const TextStyle(fontSize: 15,color: Colors.white),
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'Date is Required';
-                    }
-                    return null;
-                  },
-                  onSaved: (String? value) {
-                    _date = value!;
-                  },
-                )
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _date = value!;
+                    },
+                  )
+                ),
               ),
             ),
             const SizedBox(
@@ -124,94 +143,139 @@ class _TransactionState extends State<Transaction> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 3.2,
-                  height: MediaQuery.of(context).size.height / 9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF13254C),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "INCOME",
-                          style: TextStyle(
-                            color: Color(0xFF518DAE),
-                            letterSpacing: 1,
+                Material(
+                  elevation: 10,
+                  shadowColor: const Color(0xff0AF439),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 3.2,
+                    height: MediaQuery.of(context).size.height / 9,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      // color: app_color.widget,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end:
+                        Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
+                        colors: <Color>[
+                          Color(0xff169e3c),
+                          Color(0xff0AF439)
+                        ], // red to yellow
+                        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "INCOME",
+                            style: TextStyle(
+                              color: app_color.text,
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "$income",
-                          style: const TextStyle(
-                            color: Color(0xFF43B840),
-                            letterSpacing: 1,
+                          Text(
+                            "+$income",
+                            style: const TextStyle(
+                              color: Color(0xFFffffff),
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 // const SizedBox(width: 10,),
 
-                Container(
-                  width: MediaQuery.of(context).size.width / 3.2,
-                  height: MediaQuery.of(context).size.height / 9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF13254C),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "EXPENSE",
-                          style: TextStyle(
-                            color: Color(0xFF518DAE),
-                            letterSpacing: 1,
+                Material(
+                  elevation: 10,
+                  shadowColor: const Color(0xfff40a0a),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 3.2,
+                    height: MediaQuery.of(context).size.height / 9,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      // color: app_color.widget,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end:
+                        Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
+                        colors: <Color>[
+                          Color(0xff9e1616),
+                          Color(0xfff40a0a)
+                        ], // red to yellow
+                        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "EXPENSE",
+                            style: TextStyle(
+                              color: app_color.text,
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "$expense",
-                          style: const TextStyle(
-                            color: Color(0xFFC55D5D),
-                            letterSpacing: 1,
+                          Text(
+                            "-$expense",
+                            style: const TextStyle(
+                              color: Color(0xFFffffff),
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 // const SizedBox(width: 10,),
 
-                Container(
-                  width: MediaQuery.of(context).size.width / 3.2,
-                  height: MediaQuery.of(context).size.height / 9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF13254C),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "BALANCE",
-                          style: TextStyle(
-                            color: Color(0xFF518DAE),
-                            letterSpacing: 1,
+                Material(
+                  elevation: 10,
+                  shadowColor: const Color(0xff0a68f4),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 3.2,
+                    height: MediaQuery.of(context).size.height / 9,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      // color: app_color.widget,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end:
+                        Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
+                        colors: <Color>[
+                          Color(0xff163d9e),
+                          Color(0xff0a68f4)
+                        ], // red to yellow
+                        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "BALANCE",
+                            style: TextStyle(
+                              color: app_color.text,
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "${income! - expense!}",
-                          style: const TextStyle(
-                            color: Color(0xFF9CA59E),
-                            letterSpacing: 1,
+                          Text(
+                            "${income! - expense!}",
+                            style: const TextStyle(
+                              color: Color(0xFFffffff),
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -222,7 +286,7 @@ class _TransactionState extends State<Transaction> {
             ),
             const Text(
               "Transactions",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: app_color.text),
             ),
             const SizedBox(
               height: 4,
@@ -258,7 +322,7 @@ class _TransactionState extends State<Transaction> {
                           },
                           child: snapshot.data![index].date == _dateController.text ?
                           Card(
-                            color: Colors.white10,
+                            color: app_color.list,
                             child:
                             ListTile(
                               onLongPress: (){
@@ -287,10 +351,10 @@ class _TransactionState extends State<Transaction> {
                                   ),
                                 );
                               },
-                              contentPadding: const EdgeInsets.all(12.0),
+                              contentPadding: const EdgeInsets.all(9.0),
                               title: Text(
                                 "${snapshot.data![index].category!} \n ${snapshot.data![index].date}",
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: app_color.text),
                               ),
                               subtitle: Text(
                                 snapshot.data![index].amount.toString(),

@@ -4,6 +4,8 @@ import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:money_management/settings/configure.dart';
 import 'package:money_management/settings/help.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -21,11 +23,12 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xFF020925),
+        elevation: 0.2,
+        backgroundColor: app_color.widget,
         title: const Text("Settings"),
+        titleTextStyle: const TextStyle(color: Colors.black),
       ),
       body: GridView.count(
           crossAxisCount: 3,
@@ -41,10 +44,10 @@ class _SettingsState extends State<Settings> {
                       debugPrint("Configuration");
                       Navigator.push(context, MaterialPageRoute(builder: (_) => const Configure()));
                     },
-                    icon: const Icon(Icons.settings_outlined,color: Colors.grey,
+                    icon: const Icon(Icons.settings_outlined,color: Colors.black,
                     ),
                 ),
-                const Center(child: Text("Configuration",style: TextStyle(color: Colors.grey),)),
+                const Center(child: Text("Configuration",style: TextStyle(color: Colors.black),)),
               ],
             ),
             Column(
@@ -106,8 +109,8 @@ class _SettingsState extends State<Settings> {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.settings_backup_restore,color: Colors.grey,),),
-                const Center(child: Text("Reset App",style: TextStyle(color: Colors.grey),)),
+                  icon: const Icon(Icons.settings_backup_restore,color: Colors.black,),),
+                const Center(child: Text("Reset App",style: TextStyle(color: Colors.black),)),
               ],
             ),
             Column(
@@ -118,8 +121,8 @@ class _SettingsState extends State<Settings> {
                     debugPrint("Helppp");
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const Help()));
                   },
-                  icon: const Icon(Icons.help,color: Colors.grey,),),
-                const Center(child: Text("Help",style: TextStyle(color: Colors.grey),)),
+                  icon: const Icon(Icons.help,color: Colors.black,),),
+                const Center(child: Text("Help",style: TextStyle(color: Colors.black),)),
               ],
             ),
 

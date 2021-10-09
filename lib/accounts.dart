@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_management/db/database_transaction.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 
 class Accounts extends StatefulWidget {
@@ -39,49 +41,45 @@ class _AccountsState extends State<Accounts> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF020925),
-        elevation: 0,
+        backgroundColor: app_color.back,
+        elevation: 0.2,
+        centerTitle: true,
         title: const Text(
             'Accounts',
           style: TextStyle(
-            color: Colors.white,
+            color: app_color.text,
           ),
         ),
-        // actions: [
-        //   IconButton(
-        //       onPressed: (){
-        //         Navigator.push(context, MaterialPageRoute(builder: (_) => const AddData()));
-        //         debugPrint("options clicked");
-        //       },
-        //       icon: const Icon(
-        //         Icons.add,
-        //         color: Colors.white,
-        //       ),
-        //   ),
-        // //   PopupMenuButton<int>(
-        // //     onSelected: (item) => handleClick(item),
-        // //     itemBuilder: (context) => [
-        // //       const PopupMenuItem<int>(value: 0, child: Text('Add')),
-        // //       const PopupMenuItem<int>(value: 1, child: Text('Delete')),
-        // //     ],
-        // //   ),
-        // ],
       ),
       body: Column(
         children: [
-          const SizedBox(height: 20,),
+          const SizedBox(height: 10,),
           Container(
-            color: const Color(0xFF020925),
+            padding: const EdgeInsets.all(35),
+            // color: app_color.back,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                // Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
+                colors: <Color>[
+                  Color(0xff4700fd),
+                  Color(0xff541ce5),
+                  Color(0xff6325ff)
+                ], // red to yellow
+                tileMode: TileMode.repeated, // repeats the gradient over the canvas
+              ),
+            ),
             child: Row(
               children: [
                 Expanded(
                   flex: 1,
                     child: Column(
                       children: [
-                        const Text("Assets",style: TextStyle(color: Colors.white),),
-                        Text("$assets",style: const TextStyle(color: Colors.blueAccent),),
+                        const Text("Assets",style: TextStyle(color: app_color.textWhite),),
+                        Text("$assets",style: const TextStyle(color: Colors.blue),),
                       ],
                     )
                 ),
@@ -89,7 +87,7 @@ class _AccountsState extends State<Accounts> {
                     flex: 1,
                     child: Column(
                       children: [
-                        const Text("Liablities",style: TextStyle(color: Colors.white),),
+                        const Text("Liablities",style: TextStyle(color: app_color.textWhite),),
                         Text("$liabilities",style: const TextStyle(color: Colors.red),),
                       ],
                     )
@@ -98,7 +96,7 @@ class _AccountsState extends State<Accounts> {
                     flex: 1,
                     child: Column(
                       children: [
-                        const Text("Total",style: TextStyle(color: Colors.white),),
+                        const Text("Total",style: TextStyle(color: app_color.textWhite),),
                         Text("${assets! - liabilities!}",style: const TextStyle(color: Colors.white),),
                       ],
                     )
@@ -106,7 +104,7 @@ class _AccountsState extends State<Accounts> {
               ],
             ),
           ),
-          const SizedBox(height: 50,),
+          const SizedBox(height: 1,),
           Expanded(
             child: Container(
             color: Colors.grey.withOpacity(0.1),
@@ -143,13 +141,13 @@ class _AccountsState extends State<Accounts> {
                           },
                           child: snapshot.data![index].date != "Jan 01, 2015" ?
                           Card(
-                            color: Colors.white10,
+                            color: Colors.white,
                             child:
                             ListTile(
-                              contentPadding: const EdgeInsets.all(12.0),
+                              contentPadding: const EdgeInsets.all(8.5),
                               title: Text(
                                 "${snapshot.data![index].date}\n${snapshot.data![index].account}",
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: app_color.text),
                               ),
                               subtitle: Text(
                                 snapshot.data![index].amount.toString(),

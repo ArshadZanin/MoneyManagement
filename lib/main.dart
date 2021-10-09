@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_management/home.dart';
+import 'package:money_management/splash%20screen/splash_screen.dart';
 
 
 void main() {
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'Money Management',
       theme: ThemeData(
         fontFamily: 'Saira',
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
-      home: const MyHomePage(),
+      home: const SplashScreen1Sub(),
 
     );
   }
