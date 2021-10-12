@@ -1,5 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:money_management/accounts.dart';
+import 'package:money_management/db/database_expense_category.dart';
+import 'package:money_management/db/database_income_category.dart';
+import 'package:money_management/db/database_transaction.dart';
+import 'package:money_management/onboard_anime/onboard_01.dart';
 import 'package:money_management/transaction/add_transaction.dart';
 import 'package:money_management/settings.dart';
 import 'package:money_management/stats.dart';
@@ -17,11 +22,28 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
 
+  DatabaseHandler handler = DatabaseHandler();
+  DatabaseHandlerIncomeCategory handler1 = DatabaseHandlerIncomeCategory();
+  DatabaseHandlerExpenseCategory handler2 = DatabaseHandlerExpenseCategory();
+
+
   TabController? controller;
   @override
   void initState() {
     controller = TabController(length: 4, vsync: this);
     super.initState();
+    handler = DatabaseHandler();
+    handler.initializeDB().whenComplete(() async {
+
+      handler.retrieveWithCategory("income");
+
+      List<User> listDatabase = await handler.retrieveUsers();
+      if(listDatabase.isEmpty){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Onboard()));
+      }
+
+      setState(() {});
+    });
   }
 
   @override
@@ -78,13 +100,32 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         padding: const EdgeInsets.only(bottom: 30.0),
         child: FloatingActionButton(
           backgroundColor: app_color.widget,
-          child: const Center(
-            child: Icon(
-              Icons.add,
-              color: Colors.black,
-              size: 32.0,
+          child: OpenContainer(
+            transitionDuration: const Duration(milliseconds: 800),
+            closedBuilder: (_, openContainer){
+              return const Center(
+                child: Icon(Icons.add,color: Colors.black,size: 32.0,),
+              );
+            },
+            openColor: Colors.white,
+            closedElevation: 50.0,
+            closedShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
+            closedColor: Colors.white,
+            openBuilder: (_, closeContainer){
+              return const Scaffold(
+                body: AddTrans(),
+              );
+            },
           ),
+          // const Center(
+          //   child: Icon(
+          //     Icons.add,
+          //     color: Colors.black,
+          //     size: 32.0,
+          //   ),
+          // ),
           onPressed: () {
             debugPrint("Add Data Clicked");
             Navigator.push(context, MaterialPageRoute(builder: (_) => const AddTrans()));

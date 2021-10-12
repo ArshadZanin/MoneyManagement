@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/settings/add_income.dart';
 import 'package:money_management/settings/configure.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
+
 
 class IncomeCategory extends StatefulWidget {
   const IncomeCategory({Key? key}) : super(key: key);
@@ -13,6 +15,8 @@ class IncomeCategory extends StatefulWidget {
 class _IncomeCategoryState extends State<IncomeCategory> {
 
   late DatabaseHandlerIncomeCategory handler;
+
+  int delete = 0;
 
   @override
   void initState() {
@@ -27,7 +31,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF020925),
+      backgroundColor: app_color.back,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xFF020925),
@@ -39,6 +43,43 @@ class _IncomeCategoryState extends State<IncomeCategory> {
           },
         ),
         actions: [
+          IconButton(
+            onPressed: (){
+              if(delete == 0){
+                showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Are you sure?'),
+                      content: const Text('it will delete permanently all data....\n swap the data right to left to delete....'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context, 'OK');
+                          },
+                          child: const Text('OK',style: TextStyle(color: Colors.red),),
+                        ),
+                      ],
+                    ),);
+              }
+              setState(() {
+                delete == 0 ? delete = 1 : delete = 0;
+              });
+              debugPrint("delete clicked $delete");
+            },
+            icon: delete == 0 ?
+            const Icon(
+              Icons.delete_outlined,
+              color: Colors.white,
+            ):
+            const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+          ),
           IconButton(
             onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (_) => const AddIncomeData()));
@@ -59,7 +100,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
                 return Dismissible(
-                  direction: DismissDirection.endToStart,
+                  direction: delete == 1 ? DismissDirection.endToStart : DismissDirection.none,
                   background: Container(
                     color: Colors.red,
                     alignment: Alignment.centerRight,
@@ -74,10 +115,11 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                     });
                   },
                   child: Card(
+                    elevation: 5,
                     child: ListTile(
-                      tileColor: const Color(0xFF13254C),
+                      tileColor: const Color(0xFFffffff),
                       contentPadding: const EdgeInsets.only(left: 20,top: 10,bottom: 10),
-                      title: Text(snapshot.data![index].incomeCategory!,style: const TextStyle(color: Colors.white),),
+                      title: Text(snapshot.data![index].incomeCategory!,style: const TextStyle(color: Colors.black),),
                       // onLongPress: () {
                       //   Navigator.pushReplacement(
                       //     context,

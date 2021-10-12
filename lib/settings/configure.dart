@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:money_management/color/app_color.dart' as app_color;
 import 'package:money_management/settings/passcode.dart';
 import 'package:money_management/splash%20screen/splash_screen.dart';
+import 'package:money_management/transaction/add_transaction.dart';
 
 
 
@@ -100,7 +101,11 @@ class _ConfigureState extends State<Configure> {
       last += 12;
       valueLast = "$last";
     }else{
-      valueLast = "0$last";
+      if(last == 11 || last == 12){
+        valueLast = "$last";
+      }else{
+        valueLast = "0$last";
+      }
     }
     String time = "$valueLast:${second[0]}";
 
@@ -289,11 +294,19 @@ class _ConfigureState extends State<Configure> {
   }
 
   Future<void> notificationSelected(String? payload) async {
-    showDialog(context: context,
-      builder: (context) => AlertDialog(
-        content: Text("Notification clicked $payload"),
-      ),
-    );
+    // showDialog(context: context,
+    //   builder: (context) => AlertDialog(
+    //     content: TextButton(onPressed: (){
+    //       Navigator.push(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+    //     }, child: const Text("Add Now",style: TextStyle(color: Colors.blue),)),
+    //   ),
+    // );
+    Future.delayed(const Duration(milliseconds: 0), () {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+      setState(() {
+      });
+
+    });
   }
 
 }

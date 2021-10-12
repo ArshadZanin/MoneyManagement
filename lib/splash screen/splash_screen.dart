@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:animations/animations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/home.dart';
@@ -149,8 +150,10 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                // child: Image.asset('assets/images/file_name.png')
-                child: Icon(Icons.money),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                    child: Image.asset('assets/images/app_icon.png',fit: BoxFit.fitHeight,)),
+                // child: const Icon(Icons.money),
               ),
             ),
           ),

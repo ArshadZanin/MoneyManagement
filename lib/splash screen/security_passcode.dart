@@ -16,7 +16,7 @@ class _SecurityPasscodeState extends State<SecurityPasscode> {
 
 
   int count = 0;
-  String passcode = "0000";
+  String passcode = "";
   bool check = false;
   String passcodeFromDb = "";
 
@@ -171,6 +171,11 @@ class _SecurityPasscodeState extends State<SecurityPasscode> {
                     debugPrint("$passcode  $passcodeFromDb");
                     if(passcode == passcodeFromDb){
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MyHomePage()));
+                    }else{
+                      setState(() {
+                        passcode = "";
+                        count = 0;
+                      });
                     }
                   }
                 },child: const Text("Ok",style: TextStyle(color: app_color.text,fontSize: 33),),),

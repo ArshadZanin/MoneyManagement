@@ -18,6 +18,9 @@ class _PassCodeState extends State<PassCode> {
   int count = 0;
   String passcode = "";
   bool check = false;
+  String title = "Set Passcode";
+  String confirmPasscode = "1111";
+
 
 
   @override
@@ -37,25 +40,26 @@ class _PassCodeState extends State<PassCode> {
   }
 
   @override
+  @Deprecated("message")
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: app_color.back,
         appBar: AppBar(
-          title: const Text("Set Passcode"),
+          title: Text(title),
           backgroundColor: app_color.button,
-          actions: [
-            FlatButton(onPressed: () async {
-              if(passcode.length == 4){
-
-                PasscodeDb user3 = PasscodeDb(passcode: passcode, checks: "$check");
-                List<PasscodeDb> listofPasscodeDb = [user3];
-                DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
-                await db3.insertPasscode(listofPasscodeDb);
-
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Configure()));
-              }
-            }, child: const Text("Done",style: TextStyle(color: app_color.textWhite),))
-          ],
+          // actions: [
+          //   FlatButton(onPressed: () async {
+          //     if(passcode.length == 4){
+          //
+          //       PasscodeDb user3 = PasscodeDb(passcode: passcode, checks: "$check");
+          //       List<PasscodeDb> listofPasscodeDb = [user3];
+          //       DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
+          //       await db3.insertPasscode(listofPasscodeDb);
+          //
+          //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Configure()));
+          //     }
+          //   }, child: const Text("Done",style: TextStyle(color: app_color.textWhite),))
+          // ],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -177,7 +181,34 @@ class _PassCodeState extends State<PassCode> {
             ),Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FlatButton(onPressed: (){},child: const Text("",style: TextStyle(color: app_color.text,fontSize: 33),),),
+                FlatButton(onPressed: () async {
+
+                  if(title == "Confirm Passcode"){
+                    if(passcode.length == 4) {
+                      if(confirmPasscode == passcode){
+                        PasscodeDb user3 = PasscodeDb(
+                            passcode: passcode, checks: "$check");
+                        List<PasscodeDb> listofPasscodeDb = [user3];
+                        DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
+                        await db3.insertPasscode(listofPasscodeDb);
+
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) => const Configure()));
+                      }else{
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const PassCode()));
+                      }
+                    }
+                  }
+                  else{
+                    setState(() {
+                      title = "Confirm Passcode";
+                      count = 0;
+                      confirmPasscode = passcode;
+                      passcode = "";
+                    });
+                  }
+                },
+                  child: const Text("Ok",style: TextStyle(color: app_color.text,fontSize: 33),),),
                 const SizedBox(width: 5,),
                 FlatButton(onPressed: (){
                   if(count != 4){

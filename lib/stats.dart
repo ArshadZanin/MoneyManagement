@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_management/Stats/expenses.dart';
-import 'package:money_management/Stats/income.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -21,7 +19,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
   late final _dateMonth = DateFormat('MMM').format(DateTime.now());
 
   TabController? controller;
-  String _value = "Today";
+  String _value = "Monthly";
 
   void _value1(String value) {
     setState(() {
@@ -66,6 +64,168 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
     controller = TabController(length: 2, vsync: this);
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
+
+      ///take database list to here///
+      List<Map<String, Object?>> databaseList = await handler.retrieveUsersDatabase();
+      // debugPrint("hello : $databaseList");
+
+
+      ///income today///
+      Set<String> categorySet = {};
+      for(int i = 0; i < databaseList.length; i++){
+        if(databaseList[i]["trans"] == "income"){
+          String data = databaseList[i]["category"].toString();
+          categorySet.add(data);
+        }
+      }
+      List<String> listCategory = [...categorySet.toList()];
+      Map<String, double> categoryAmount = {};
+      for(int i = 0; i < categorySet.length; i++){
+        double total = 0;
+        for(int j = 0; j < databaseList.length; j++ ){
+          if(databaseList[j]['date'] == _dateToday && databaseList[j]['category'] == listCategory[i]){
+            double value = double.parse(databaseList[j]["amount"].toString());
+            total = total + value;
+          }
+        }
+        categoryAmount.addAll({listCategory[i]: total});
+      }
+      for (int i = 0; i < categoryAmount.length; i++) {
+        pieDataTodayIncome.add(
+            _PieData(categoryAmount.keys.toList()[i], categoryAmount.values.toList()[i]));
+      }
+
+      ///expense today///
+      Set<String> categorySet1 = {};
+      for(int i = 0; i < databaseList.length; i++){
+        if(databaseList[i]["trans"] == "expense"){
+          String data = databaseList[i]["category"].toString();
+          categorySet1.add(data);
+        }
+      }
+      List<String> listCategory1 = [...categorySet1.toList()];
+      Map<String, double> categoryAmount1 = {};
+      for(int i = 0; i < categorySet1.length; i++){
+        double total = 0;
+        for(int j = 0; j < databaseList.length; j++ ){
+          if(databaseList[j]['date'] == _dateToday && databaseList[j]['category'] == listCategory1[i]){
+            double value = double.parse(databaseList[j]["amount"].toString());
+            total = total + value;
+          }
+        }
+        categoryAmount1.addAll({listCategory1[i]: total});
+      }
+      for (int i = 0; i < categoryAmount1.length; i++) {
+        pieDataTodayExpense.add(
+            _PieData(categoryAmount1.keys.toList()[i], categoryAmount1.values.toList()[i]));
+      }
+
+      ///income month///
+      Set<String> categorySet2 = {};
+      for(int i = 0; i < databaseList.length; i++){
+        if(databaseList[i]["trans"] == "income"){
+          String data = databaseList[i]["category"].toString();
+          categorySet2.add(data);
+        }
+      }
+      List<String> listCategory2 = [...categorySet2.toList()];
+      Map<String, double> categoryAmount2 = {};
+      for(int i = 0; i < categorySet2.length; i++){
+        double total = 0;
+        for(int j = 0; j < databaseList.length; j++ ){
+          String dateIs = databaseList[j]['date'].toString().substring(0, databaseList[j]['date'].toString().length - 9);
+          if(dateIs == _dateMonth && databaseList[j]['category'] == listCategory2[i]){
+            double value = double.parse(databaseList[j]["amount"].toString());
+            total = total + value;
+          }
+        }
+        categoryAmount2.addAll({listCategory2[i]: total});
+      }
+      for (int i = 0; i < categoryAmount2.length; i++) {
+        pieDataMonthlyIncome.add(
+            _PieData(categoryAmount2.keys.toList()[i], categoryAmount2.values.toList()[i]));
+      }
+
+
+      ///expense month///
+      Set<String> categorySet3 = {};
+      for(int i = 0; i < databaseList.length; i++){
+        if(databaseList[i]["trans"] == "expense"){
+          String data = databaseList[i]["category"].toString();
+          categorySet3.add(data);
+        }
+      }
+      List<String> listCategory3 = [...categorySet3.toList()];
+      Map<String, double> categoryAmount3 = {};
+      for(int i = 0; i < categorySet3.length; i++){
+        double total = 0;
+        for(int j = 0; j < databaseList.length; j++ ){
+          String dateIs = databaseList[j]['date'].toString().substring(0, databaseList[j]['date'].toString().length - 9);
+          if(dateIs == _dateMonth && databaseList[j]['category'] == listCategory3[i]){
+            double value = double.parse(databaseList[j]["amount"].toString());
+            total = total + value;
+          }
+        }
+        categoryAmount3.addAll({listCategory3[i]: total});
+      }
+      for (int i = 0; i < categoryAmount3.length; i++) {
+        pieDataMonthlyExpense.add(
+            _PieData(categoryAmount3.keys.toList()[i], categoryAmount3.values.toList()[i]));
+      }
+
+      ///income year///
+      Set<String> categorySet4 = {};
+      for(int i = 0; i < databaseList.length; i++){
+        if(databaseList[i]["trans"] == "income"){
+          String data = databaseList[i]["category"].toString();
+          categorySet4.add(data);
+        }
+      }
+      List<String> listCategory4 = [...categorySet4.toList()];
+      Map<String, double> categoryAmount4 = {};
+      for(int i = 0; i < categorySet4.length; i++){
+        double total = 0;
+        for(int j = 0; j < databaseList.length; j++ ){
+          String dateIs = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
+          debugPrint("Date is : $dateIs");
+          if(dateIs == _dateYear && databaseList[j]['category'] == listCategory4[i]){
+            double value = double.parse(databaseList[j]["amount"].toString());
+            total = total + value;
+          }
+        }
+        categoryAmount4.addAll({listCategory4[i]: total});
+      }
+      for (int i = 0; i < categoryAmount4.length; i++) {
+        pieDataAnnuallyIncome.add(
+            _PieData(categoryAmount4.keys.toList()[i], categoryAmount4.values.toList()[i]));
+      }
+
+      ///expense year///
+      Set<String> categorySet5 = {};
+      for(int i = 0; i < databaseList.length; i++){
+        if(databaseList[i]["trans"] == "expense"){
+          String data = databaseList[i]["category"].toString();
+          categorySet5.add(data);
+        }
+      }
+      List<String> listCategory5 = [...categorySet5.toList()];
+      Map<String, double> categoryAmount5 = {};
+      for(int i = 0; i < categorySet5.length; i++){
+        double total = 0;
+        for(int j = 0; j < databaseList.length; j++ ){
+          String dateIs = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
+          if(dateIs == _dateYear && databaseList[j]['category'] == listCategory5[i]){
+            double value = double.parse(databaseList[j]["amount"].toString());
+            total = total + value;
+          }
+        }
+        categoryAmount5.addAll({listCategory5[i]: total});
+      }
+      for (int i = 0; i < categoryAmount5.length; i++) {
+        pieDataAnnuallyExpense.add(
+            _PieData(categoryAmount5.keys.toList()[i], categoryAmount5.values.toList()[i]));
+      }
+
       ///income total///
       totalData = await handler.retrieveWithCategory("income");
       for (int i = 0; i < totalData.length; i++) {
@@ -78,43 +238,6 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
         pieDataTotalExpense.add(
             _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
       }
-      ///income today///
-      totalData = await handler.retrieveWithCategoryToday("income",_dateToday);
-      for (int i = 0; i < totalData.length; i++) {
-        pieDataTodayIncome.add(
-            _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
-      }
-      ///expense today///
-      totalData = await handler.retrieveWithCategoryToday("expense",_dateToday);
-      for (int i = 0; i < totalData.length; i++) {
-        pieDataTodayExpense.add(
-            _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
-      }
-      ///income year///
-      totalData = await handler.retrieveWithCategoryYear("income",_dateYear);
-      for (int i = 0; i < totalData.length; i++) {
-        pieDataAnnuallyIncome.add(
-            _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
-      }
-      ///expense year///
-      totalData = await handler.retrieveWithCategoryYear("expense",_dateYear);
-      for (int i = 0; i < totalData.length; i++) {
-        pieDataAnnuallyExpense.add(
-            _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
-      }
-      ///income month///
-      totalData = await handler.retrieveWithCategoryMonth("income",_dateMonth,_dateYear);
-      for (int i = 0; i < totalData.length; i++) {
-        pieDataMonthlyIncome.add(
-            _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
-      }
-      ///expense month///
-      totalData = await handler.retrieveWithCategoryMonth("expense",_dateMonth,_dateYear);
-      for (int i = 0; i < totalData.length; i++) {
-        pieDataMonthlyExpense.add(
-            _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
-      }
-
       setState(() {});
     });
   }
@@ -143,9 +266,9 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
 
   Widget _textTitle() {
     if (_value == 'Monthly') {
-      return Text(_dateYear);
+      return Text(_dateMonth);
     } else if (_value == 'Annually') {
-      return const Text("Annually");
+      return Text(_dateYear);
     }
     // else if (_value == 'Weekly') {
     //   return Text(_date);
@@ -181,7 +304,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                 iconSize: 15,
                 value: _value,
                 borderRadius: BorderRadius.circular(10.0),
-                dropdownColor: Colors.grey,
+                dropdownColor: app_color.back,
                 items: <String>[
                   'Today',
                   // 'Weekly',

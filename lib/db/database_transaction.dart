@@ -100,7 +100,7 @@ class DatabaseHandler {
     var dbClient = await initializeDB();
     var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE trans = ?", ['income']);
     var listResult = result[0].values.toList();
-    if(listResult[0].toString() == null){
+    if(listResult[0].toString().isEmpty){
       income= "0";
     }else {
       income = listResult[0].toString();
@@ -113,7 +113,7 @@ class DatabaseHandler {
     var dbClient = await initializeDB();
     var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE trans = ?", ['expense']);
     var listResult = result[0].values.toList();
-    if(listResult[0].toString() == null){
+    if(listResult[0].toString().isEmpty){
       expense= "0";
     }else {
       expense = listResult[0].toString();
@@ -126,7 +126,7 @@ class DatabaseHandler {
     var dbClient = await initializeDB();
     var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE account = 'Assets'");
     var listResult = result[0].values.toList();
-    if(listResult[0].toString() == null){
+    if(listResult[0].toString().isEmpty){
       assets= "0";
     }else {
       assets = listResult[0].toString();
@@ -139,7 +139,7 @@ class DatabaseHandler {
     var dbClient = await initializeDB();
     var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE account = 'Liabilities'");
     var listResult = result[0].values.toList();
-    if(listResult[0].toString() == null){
+    if(listResult[0].toString().isEmpty){
       liabilities= "0";
     }else {
       liabilities = listResult[0].toString();
@@ -167,7 +167,7 @@ class DatabaseHandler {
     for(int i = 0; i < listCategory.length; i++){
       final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}'");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString() == null){
+      if(listResult[0].toString().isEmpty){
         amount= "0";
       }else {
         amount = listResult[0].toString();
@@ -265,6 +265,13 @@ class DatabaseHandler {
       categoryAmount.addAll({listCategory[i]: amountLast});
     }
     return categoryAmount;
+  }
+
+
+  Future<List<Map<String, Object?>>> retrieveUsersDatabase() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.query('users');
+    return queryResult;
   }
 
 }

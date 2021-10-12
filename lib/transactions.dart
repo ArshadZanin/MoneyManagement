@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'db/database_transaction.dart';
 import 'package:money_management/color/app_color.dart' as app_color;
 import 'package:money_management/settings/configure.dart';
@@ -20,6 +21,8 @@ class _TransactionState extends State<Transaction> {
   double? income = 0.0;
   double? expense = 0.0;
   double? balance = 0.0;
+
+
 
 
 
@@ -56,12 +59,61 @@ class _TransactionState extends State<Transaction> {
       extendBody: true,
       backgroundColor: app_color.back,
       appBar: AppBar(
+        actions: [
+          SizedBox(
+            width: 100,
+            child: Center(
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  contentPadding:
+                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                ),
+                readOnly: true,
+                keyboardType: TextInputType.none,
+                controller: _dateController,
+                onTap: () async {
+                  await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2015),
+                    lastDate: DateTime.now(),
+                  ).then((selectedDate) {
+                    if (selectedDate != null) {
+                      _dateController.text =
+                          DateFormat('MMM dd, yyyy').format(selectedDate);
+                      _date = _dateController.text;
+                      setState(() {
+
+                      });
+
+                    }
+                  });
+                },
+                style: const TextStyle(fontSize: 15,color: Colors.black),
+                validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return 'Date is Required';
+                  }
+                  return null;
+                },
+                onSaved: (String? value) {
+                  _date = value!;
+                },
+              ),
+            ),
+          )
+        ],
         backgroundColor: app_color.appBar,
         title: const Text(
           "Money Management",
           style: TextStyle(color: app_color.text, letterSpacing: 1),
         ),
-        centerTitle: true,
         elevation: 0.2,
       ),
       body: Center(
@@ -69,205 +121,163 @@ class _TransactionState extends State<Transaction> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 10,),
-            Material(
-              elevation: 20,
-              shadowColor: const Color(0xff4700fd),
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                width: MediaQuery.of(context).size.width - 12,
-                height: MediaQuery.of(context).size.height / 9,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  // color: app_color.widget,
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    // Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
-                    colors: <Color>[
-                      Color(0xff4700fd),
-                      Color(0xff541ce5),
-                      Color(0xff6325ff)
-                    ], // red to yellow
-                    tileMode: TileMode.repeated, // repeats the gradient over the canvas
-                  ),
-                ),
-                child: Center(
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding:
-                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                    ),
-                    readOnly: true,
-                    keyboardType: TextInputType.none,
-                    controller: _dateController,
-                    onTap: () async {
-                      await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2015),
-                        lastDate: DateTime.now(),
-                      ).then((selectedDate) {
-                        if (selectedDate != null) {
-                          _dateController.text =
-                              DateFormat('MMM dd, yyyy').format(selectedDate);
-                          _date = _dateController.text;
-                          setState(() {
-
-                          });
-
-                        }
-                      });
-                    },
-                    style: const TextStyle(fontSize: 15,color: Colors.white),
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Date is Required';
-                      }
-                      return null;
-                    },
-                    onSaved: (String? value) {
-                      _date = value!;
-                    },
-                  )
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Material(
-                  elevation: 10,
-                  shadowColor: const Color(0xff0AF439),
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.2,
-                    height: MediaQuery.of(context).size.height / 9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      // color: app_color.widget,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end:
-                        Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
-                        colors: <Color>[
-                          Color(0xff169e3c),
-                          Color(0xff0AF439)
-                        ], // red to yellow
-                        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                const SizedBox(width: 10,),
+                Expanded(
+                  flex: 1,
+                  child: Material(
+                    elevation: 10,
+                    shadowColor: const Color(0xff61ff82),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 3.2,
+                      height: MediaQuery.of(context).size.height / 9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        // color: app_color.widget,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end:
+                          Alignment.bottomRight, // 10% of the width, so there are ten blinds.
+                          colors: <Color>[
+                            Color(0xff00c9af),
+                            // Color(0xff11c211),
+                            // Color(0xff2ad054),
+                            Color(0xff61f680)
+                          ], // red to yellow
+                          tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "INCOME",
-                            style: TextStyle(
-                              color: app_color.text,
-                              letterSpacing: 1,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Earned",
+                              style: TextStyle(
+                                color: app_color.textWhite,
+                                letterSpacing: 1,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "+$income",
-                            style: const TextStyle(
-                              color: Color(0xFFffffff),
-                              letterSpacing: 1,
+                            Text(
+                              "+$income",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFffffff),
+                                letterSpacing: 1,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                // const SizedBox(width: 10,),
-
-                Material(
-                  elevation: 10,
-                  shadowColor: const Color(0xfff40a0a),
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.2,
-                    height: MediaQuery.of(context).size.height / 9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      // color: app_color.widget,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end:
-                        Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
-                        colors: <Color>[
-                          Color(0xff9e1616),
-                          Color(0xfff40a0a)
-                        ], // red to yellow
-                        tileMode: TileMode.repeated, // repeats the gradient over the canvas
-                      ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "EXPENSE",
-                            style: TextStyle(
-                              color: app_color.text,
-                              letterSpacing: 1,
+                            const Text(
+                              "income this month",
+                              style: TextStyle(
+                                color: app_color.textWhite,
+                                letterSpacing: 1,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "-$expense",
-                            style: const TextStyle(
-                              color: Color(0xFFffffff),
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // const SizedBox(width: 10,),
-
-                Material(
-                  elevation: 10,
-                  shadowColor: const Color(0xff0a68f4),
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.2,
-                    height: MediaQuery.of(context).size.height / 9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      // color: app_color.widget,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end:
-                        Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
-                        colors: <Color>[
-                          Color(0xff163d9e),
-                          Color(0xff0a68f4)
-                        ], // red to yellow
-                        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                const SizedBox(width: 10,),
+                Expanded(
+                  flex: 1,
+                  child: Material(
+                    elevation: 10,
+                    shadowColor: const Color(0xfffd5050),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 3.2,
+                      height: MediaQuery.of(context).size.height / 9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        // color: app_color.widget,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end:
+                          Alignment.bottomRight, // 10% of the width, so there are ten blinds.
+                          colors: <Color>[
+                            Color(0xffce009c),
+                            // Color(0xffec0303),
+                            // Color(0xffee2f2f),
+                            Color(0xfff36d6d)
+                          ], // red to yellow
+                          tileMode: TileMode.repeated, // repeats the gradient over the canvas
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Spent",
+                              style: TextStyle(
+                                color: app_color.textWhite,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            Text(
+                              "-$expense",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFffffff),
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            const Text(
+                              "expenses this month",
+                              style: TextStyle(
+                                color: app_color.textWhite,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "BALANCE",
-                            style: TextStyle(
-                              color: app_color.text,
+                  ),
+                ),
+                const SizedBox(width: 10,),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: Material(
+                elevation: 5,
+                shadowColor: const Color(0xff4792ff),
+                  borderRadius: BorderRadius.circular(10),
+                  color: app_color.widget,
+                // margin: const EdgeInsets.symmetric(horizontal: 10),
+
+                child: Column(
+                  children: [
+                    const Text("Budget so far", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: LinearPercentIndicator(
+                          animation: true,
+                          lineHeight: 20.0,
+                          animationDuration: 2000,
+                          percent: expense! <= income! ? 1 - expense! / income! : expense! / income! - 1,
+                          center: income! - expense! < 0 ?
+                          Text(
+                            "${income! - expense!}",
+                            style: const TextStyle(
+                              color: Color(0xffb10000),
                               letterSpacing: 1,
                             ),
-                          ),
+                          ) :
                           Text(
                             "${income! - expense!}",
                             style: const TextStyle(
@@ -275,16 +285,63 @@ class _TransactionState extends State<Transaction> {
                               letterSpacing: 1,
                             ),
                           ),
-                        ],
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          progressColor: expense! <= income! ? Colors.lightBlueAccent : Colors.redAccent,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
+            // Material(
+            //   elevation: 10,
+            //   shadowColor: const Color(0xff4792ff),
+            //   borderRadius: BorderRadius.circular(10),
+            //   child: Container(
+            //     width: MediaQuery.of(context).size.width / 3.2,
+            //     height: MediaQuery.of(context).size.height / 9,
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(10),
+            //       color: app_color.widget,
+            //     ),
+            //     child: Center(
+            //       child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           const Text(
+            //             "BALANCE",
+            //             style: TextStyle(
+            //               color: app_color.text,
+            //               letterSpacing: 1,
+            //             ),
+            //           ),
+            //           income! - expense! < 0 ?
+            //           Text(
+            //             "${income! - expense!}",
+            //             style: const TextStyle(
+            //               color: Color(0xFFff0000),
+            //               letterSpacing: 1,
+            //             ),
+            //           ) :
+            //           Text(
+            //             "${income! - expense!}",
+            //             style: const TextStyle(
+            //               color: Color(0xFF000000),
+            //               letterSpacing: 1,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 20,
+            // ),
             const Text(
               "Transactions",
               style: TextStyle(color: app_color.text,fontSize: 15),
@@ -323,6 +380,7 @@ class _TransactionState extends State<Transaction> {
                           },
                           child: snapshot.data![index].date == _dateController.text ?
                           Card(
+                            elevation: 3,
                             color: app_color.list,
                             child:
                             ListTile(
@@ -357,12 +415,17 @@ class _TransactionState extends State<Transaction> {
                                 "${snapshot.data![index].category!} \n ${snapshot.data![index].date}",
                                 style: const TextStyle(color: app_color.text),
                               ),
-                              subtitle: Text(
-                                snapshot.data![index].amount.toString(),
+                              subtitle:
+                              snapshot.data![index].trans == 'income' ?
+                              Text(
+                                "+ ${snapshot.data![index].amount.toString()}",
                                 textAlign: TextAlign.end,
-                                style: snapshot.data![index].trans == 'income' ?
-                                const TextStyle(color: Colors.green) :
-                                const TextStyle(color: Colors.red),
+                                style: const TextStyle(color: Colors.green),
+                              ) :
+                              Text(
+                                "- ${snapshot.data![index].amount.toString()}",
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(color: Colors.red),
                               ),
                             ),
                           ) :
