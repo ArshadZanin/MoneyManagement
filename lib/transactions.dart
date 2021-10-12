@@ -29,6 +29,8 @@ class _TransactionState extends State<Transaction> {
   late var _date = DateFormat('MMM dd, yyyy').format(DateTime.now());
   final _dateController = TextEditingController(text: DateFormat('MMM dd, yyyy').format(DateTime.now()));
 
+
+
   DatabaseHandler handler = DatabaseHandler();
   
   @override
@@ -37,15 +39,64 @@ class _TransactionState extends State<Transaction> {
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
 
-      handler.retrieveWithCategory("income");
 
-      String? income12 = await handler.calculateIncomeTotal();
-      income = double.parse(income12!);
+      late final _dateYear = _dateController.text.substring(8, _dateController.text.length);
+      late final _dateMonth = _dateController.text.substring(0, _dateController.text.length - 9);
+      // handler.retrieveWithCategory("income");
+      //
+      // String? income12 = await handler.calculateIncomeTotal();
+      // income = double.parse(income12!);
+      //
+      // String? expense12 = await handler.calculateExpenseTotal();
+      // expense = double.parse(expense12!);
+      //
+      // balance = (income! - expense!);
 
-      String? expense12 = await handler.calculateExpenseTotal();
-      expense = double.parse(expense12!);
 
-      balance = (income! - expense!);
+      ///take database list to here///
+      List<Map<String, Object?>> databaseList = await handler.retrieveUsersDatabase();
+      debugPrint("hello : $databaseList");
+
+
+      ///income month///
+      double total = 0;
+      for (int j = 0; j < databaseList.length; j++) {
+        String dateIs = databaseList[j]['date'].toString().substring(
+            0, databaseList[j]['date']
+            .toString()
+            .length - 9);
+        String dateLast = databaseList[j]['date'].toString().substring(
+            8, databaseList[j]['date']
+            .toString()
+            .length);
+        if (dateIs == _dateMonth && dateLast == _dateYear &&
+            databaseList[j]['trans'] == "income") {
+          double value = double.parse(databaseList[j]["amount"].toString());
+          total = total + value;
+        }
+      }
+      income = total;
+
+
+      ///expense month///
+      double total1 = 0;
+      for (int j = 0; j < databaseList.length; j++) {
+        String dateIs = databaseList[j]['date'].toString().substring(
+            0, databaseList[j]['date']
+            .toString()
+            .length - 9);
+        String dateLast = databaseList[j]['date'].toString().substring(
+            8, databaseList[j]['date']
+            .toString()
+            .length);
+        if (dateIs == _dateMonth && dateLast == _dateYear &&
+            databaseList[j]['trans'] == "expense") {
+          debugPrint("$dateIs $_dateMonth \n $dateLast $_dateYear");
+          double value = double.parse(databaseList[j]["amount"].toString());
+          total1 = total1 + value;
+        }
+      }
+      expense = total1;
       // await this.addUsers();
       setState(() {});
     });
@@ -91,7 +142,52 @@ class _TransactionState extends State<Transaction> {
                       setState(() {
 
                       });
-
+                      handler.initializeDB().whenComplete(() async {
+                        late final _dateYear = _dateController.text.substring(8, _dateController.text.length);
+                        late final _dateMonth = _dateController.text.substring(0, _dateController.text.length - 9);
+                        ///take database list to here///
+                        List<Map<String, Object?>> databaseList = await handler.retrieveUsersDatabase();
+                        debugPrint("hello : $databaseList");
+                        ///income month///
+                        double total = 0;
+                        for (int j = 0; j < databaseList.length; j++) {
+                          String dateIs = databaseList[j]['date'].toString().substring(
+                              0, databaseList[j]['date']
+                              .toString()
+                              .length - 9);
+                          String dateLast = databaseList[j]['date'].toString().substring(
+                              8, databaseList[j]['date']
+                              .toString()
+                              .length);
+                          if (dateIs == _dateMonth && dateLast == _dateYear &&
+                              databaseList[j]['trans'] == "income") {
+                            double value = double.parse(databaseList[j]["amount"].toString());
+                            total = total + value;
+                          }
+                        }
+                        income = total;
+                        ///expense month///
+                        double total1 = 0;
+                        for (int j = 0; j < databaseList.length; j++) {
+                          String dateIs = databaseList[j]['date'].toString().substring(
+                              0, databaseList[j]['date']
+                              .toString()
+                              .length - 9);
+                          String dateLast = databaseList[j]['date'].toString().substring(
+                              8, databaseList[j]['date']
+                              .toString()
+                              .length);
+                          if (dateIs == _dateMonth && dateLast == _dateYear &&
+                              databaseList[j]['trans'] == "expense") {
+                            debugPrint("$dateIs $_dateMonth \n $dateLast $_dateYear");
+                            double value = double.parse(databaseList[j]["amount"].toString());
+                            total1 = total1 + value;
+                          }
+                        }
+                        expense = total1;
+                        // await this.addUsers();
+                        setState(() {});
+                      });
                     }
                   });
                 },
@@ -111,7 +207,7 @@ class _TransactionState extends State<Transaction> {
         ],
         backgroundColor: app_color.appBar,
         title: const Text(
-          "Money Management",
+          "Wallet Manage",
           style: TextStyle(color: app_color.text, letterSpacing: 1),
         ),
         elevation: 0.2,
@@ -129,7 +225,7 @@ class _TransactionState extends State<Transaction> {
                   flex: 1,
                   child: Material(
                     elevation: 10,
-                    shadowColor: const Color(0xff61ff82),
+                    shadowColor: const Color(0xff00c9af),
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       width: MediaQuery.of(context).size.width / 3.2,
@@ -188,8 +284,8 @@ class _TransactionState extends State<Transaction> {
                 Expanded(
                   flex: 1,
                   child: Material(
-                    elevation: 10,
-                    shadowColor: const Color(0xfffd5050),
+                    elevation: 8,
+                    shadowColor: const Color(0xffce009c),
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       width: MediaQuery.of(context).size.width / 3.2,
@@ -297,51 +393,6 @@ class _TransactionState extends State<Transaction> {
             const SizedBox(
               height: 10,
             ),
-            // Material(
-            //   elevation: 10,
-            //   shadowColor: const Color(0xff4792ff),
-            //   borderRadius: BorderRadius.circular(10),
-            //   child: Container(
-            //     width: MediaQuery.of(context).size.width / 3.2,
-            //     height: MediaQuery.of(context).size.height / 9,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(10),
-            //       color: app_color.widget,
-            //     ),
-            //     child: Center(
-            //       child: Column(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           const Text(
-            //             "BALANCE",
-            //             style: TextStyle(
-            //               color: app_color.text,
-            //               letterSpacing: 1,
-            //             ),
-            //           ),
-            //           income! - expense! < 0 ?
-            //           Text(
-            //             "${income! - expense!}",
-            //             style: const TextStyle(
-            //               color: Color(0xFFff0000),
-            //               letterSpacing: 1,
-            //             ),
-            //           ) :
-            //           Text(
-            //             "${income! - expense!}",
-            //             style: const TextStyle(
-            //               color: Color(0xFF000000),
-            //               letterSpacing: 1,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 20,
-            // ),
             const Text(
               "Transactions",
               style: TextStyle(color: app_color.text,fontSize: 15),
@@ -357,11 +408,6 @@ class _TransactionState extends State<Transaction> {
                     return ListView.builder(
                       itemCount: snapshot.data?.length,
                       itemBuilder: (BuildContext context, int index) {
-                        // if(snapshot.data![index].trans == 'income'){
-                        //   income = income! + double.parse(snapshot.data![index].amount.toString());
-                        // }else{
-                        //   expense = expense! + double.parse(snapshot.data![index].amount.toString());
-                        // }
                         index = snapshot.data!.length - index -1;
                         return Dismissible(
                           direction: DismissDirection.none,
@@ -380,6 +426,7 @@ class _TransactionState extends State<Transaction> {
                           },
                           child: snapshot.data![index].date == _dateController.text ?
                           Card(
+                            margin: const EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 4),
                             elevation: 3,
                             color: app_color.list,
                             child:

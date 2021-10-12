@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: FloatingActionButton(
           backgroundColor: app_color.widget,
           child: OpenContainer(
-            transitionDuration: const Duration(milliseconds: 800),
+            transitionDuration: const Duration(milliseconds: 400),
             closedBuilder: (_, openContainer){
               return const Center(
                 child: Icon(Icons.add,color: Colors.black,size: 32.0,),

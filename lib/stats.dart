@@ -134,7 +134,8 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
         double total = 0;
         for(int j = 0; j < databaseList.length; j++ ){
           String dateIs = databaseList[j]['date'].toString().substring(0, databaseList[j]['date'].toString().length - 9);
-          if(dateIs == _dateMonth && databaseList[j]['category'] == listCategory2[i]){
+          String dateLast = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
+          if(dateIs == _dateMonth && dateLast == _dateYear && databaseList[j]['category'] == listCategory2[i]){
             double value = double.parse(databaseList[j]["amount"].toString());
             total = total + value;
           }
@@ -161,7 +162,8 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
         double total = 0;
         for(int j = 0; j < databaseList.length; j++ ){
           String dateIs = databaseList[j]['date'].toString().substring(0, databaseList[j]['date'].toString().length - 9);
-          if(dateIs == _dateMonth && databaseList[j]['category'] == listCategory3[i]){
+          String dateLast = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
+          if(dateIs == _dateMonth && dateLast == _dateYear && databaseList[j]['category'] == listCategory3[i]){
             double value = double.parse(databaseList[j]["amount"].toString());
             total = total + value;
           }

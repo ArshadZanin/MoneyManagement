@@ -11,6 +11,14 @@ class Help extends StatelessWidget {
         title: const Text("Help",style: TextStyle(color: Colors.white),),
         backgroundColor: const Color(0xFF020925),
       ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text("Developed by Arshad Sanin",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18,letterSpacing: 1),),
+          ],
+        ),
+      ),
     );
   }
 }
