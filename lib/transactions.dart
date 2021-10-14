@@ -23,7 +23,9 @@ class _TransactionState extends State<Transaction> {
   double? balance = 0.0;
 
 
+  int flag = 0;
 
+  List<String> listDate = [];
 
 
   late var _date = DateFormat('MMM dd, yyyy').format(DateTime.now());
@@ -38,6 +40,7 @@ class _TransactionState extends State<Transaction> {
     super.initState();
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
+
 
 
       late final _dateYear = _dateController.text.substring(8, _dateController.text.length);
@@ -55,7 +58,16 @@ class _TransactionState extends State<Transaction> {
 
       ///take database list to here///
       List<Map<String, Object?>> databaseList = await handler.retrieveUsersDatabase();
-      debugPrint("hello : $databaseList");
+      // debugPrint("hello : $databaseList");
+
+
+      ///take date///
+      Set<String> dateSet = {};
+      for(int i = 0; i < databaseList.length; i++){
+          String data = databaseList[i]["date"].toString();
+          dateSet.add(data);
+      }
+      listDate = [...dateSet.toList()];
 
 
       ///income month///
@@ -103,6 +115,11 @@ class _TransactionState extends State<Transaction> {
   }
 
 
+  int countIs(int count){
+    count++;
+    return count;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +156,14 @@ class _TransactionState extends State<Transaction> {
                       _dateController.text =
                           DateFormat('MMM dd, yyyy').format(selectedDate);
                       _date = _dateController.text;
+                      for(int i = 0; i < listDate.length; i++){
+                        if(listDate[i] == _dateController.text){
+                          flag = 1;
+                          break;
+                        }else{
+                          flag = 0;
+                        }
+                      }
                       setState(() {
 
                       });
@@ -400,7 +425,12 @@ class _TransactionState extends State<Transaction> {
             const SizedBox(
               height: 4,
             ),
-            Expanded(
+            flag != 1 ?
+            const Expanded(
+              child: Center(
+                child: Text("No data available!",style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold),),
+              ),
+            ) : Expanded(
               child: FutureBuilder(
                 future: handler.retrieveUsers(),
                 builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
@@ -451,7 +481,7 @@ class _TransactionState extends State<Transaction> {
                                         onPressed: () async {
                                           Navigator.pop(context, 'Go Back');
                                         },
-                                        child: const Text('go back',style: TextStyle(color: Colors.blue),),
+                                        child: const Text('Go Back',style: TextStyle(color: Colors.blue),),
                                       ),
                                     ],
                                   ),
@@ -467,12 +497,12 @@ class _TransactionState extends State<Transaction> {
                               Text(
                                 "+ ${snapshot.data![index].amount.toString()}",
                                 textAlign: TextAlign.end,
-                                style: const TextStyle(color: Colors.green),
+                                style: const TextStyle(color: Colors.green,fontSize: 18),
                               ) :
                               Text(
                                 "- ${snapshot.data![index].amount.toString()}",
                                 textAlign: TextAlign.end,
-                                style: const TextStyle(color: Colors.red),
+                                style: const TextStyle(color: Colors.red,fontSize: 18),
                               ),
                             ),
                           ) :

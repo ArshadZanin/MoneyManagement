@@ -50,11 +50,16 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                       title: const Text('Are you sure?'),
-                      content: const Text('it will delete permanently all data....\n swap the data right to left to delete....'),
+                      content: const Text('Swap the data right to left to delete....'),
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: const Text('Cancel'),
+                          onPressed: (){
+                            setState(() {
+                              delete = 0;
+                            });
+                            Navigator.pop(context, 'Cancel');
+                            },
+                          child: const Text('Cancel',style: TextStyle(color: Colors.black),),
                         ),
                         TextButton(
                           onPressed: () async {

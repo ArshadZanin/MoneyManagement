@@ -67,7 +67,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
 
       ///take database list to here///
       List<Map<String, Object?>> databaseList = await handler.retrieveUsersDatabase();
-      // debugPrint("hello : $databaseList");
+      debugPrint("hello : $databaseList");
 
 
       ///income today///
@@ -354,13 +354,21 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
 
 
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // const SizedBox(height: 30,),
+
+              const Center(
+                child: Text("Income Stats by category",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+              ),
+
               //Initialize the chart widget
               Center(
                 child: pieData1().isNotEmpty ?
                 SfCircularChart(
-                        title: ChartTitle(text: 'Income Stats by category'),
+                        // title: ChartTitle(text: 'Income Stats by category'),
                         legend: Legend(
+                          // alignment: ChartAlignment.near,
                             isVisible: true, backgroundColor: Colors.white),
                         series: <PieSeries<_PieData, String>>[
                             PieSeries<_PieData, String>(
@@ -384,6 +392,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                         ),
                       ),
               ),
+              const SizedBox(height: 30,),const SizedBox(height: 30,),
             ],
           ),
 
@@ -391,11 +400,18 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
 
 
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // const SizedBox(height: 30,),
+
+              const Center(
+                child: Text("Expense Stats by category",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+              ),
+
               Center(
                 child: pieData2().isNotEmpty ?
                 SfCircularChart(
-                        title: ChartTitle(text: 'Expense Stats by category'),
+                        // title: ChartTitle(text: 'Expense Stats by category'),
                         legend: Legend(
                             isVisible: true, backgroundColor: Colors.white),
                         series: <PieSeries<_PieData, String>>[
@@ -420,6 +436,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                         ),
                       ),
               ),
+              const SizedBox(height: 30,),const SizedBox(height: 30,),
             ],
           ),
         ],
