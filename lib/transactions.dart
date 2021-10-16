@@ -68,6 +68,13 @@ class _TransactionState extends State<Transaction> {
           dateSet.add(data);
       }
       listDate = [...dateSet.toList()];
+      for(int i = 0; i < listDate.length; i++){
+        if(listDate[i] == _dateController.text){
+          setState(() {
+            flag = 1;
+          });
+        }
+      }
 
 
       ///income month///
@@ -111,6 +118,10 @@ class _TransactionState extends State<Transaction> {
       expense = total1;
       // await this.addUsers();
       setState(() {});
+    });
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+      });
     });
   }
 
@@ -232,7 +243,7 @@ class _TransactionState extends State<Transaction> {
         ],
         backgroundColor: app_color.appBar,
         title: const Text(
-          "Wallet Manage",
+          "MoneyQuipo",
           style: TextStyle(color: app_color.text, letterSpacing: 1),
         ),
         elevation: 0.2,
@@ -426,9 +437,15 @@ class _TransactionState extends State<Transaction> {
               height: 4,
             ),
             flag != 1 ?
-            const Expanded(
+             Expanded(
               child: Center(
-                child: Text("No data available!",style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold),),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:const [
+                    Icon(Icons.add_to_photos_sharp,size: 50,color: Colors.black26,),
+                    Text("No data available!",style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold,color: Colors.black26,),),
+                  ],
+                ),
               ),
             ) : Expanded(
               child: FutureBuilder(

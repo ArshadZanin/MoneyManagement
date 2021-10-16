@@ -227,7 +227,13 @@ class _ConfigureState extends State<Configure> {
                   },
                   child: Container(
                     alignment: Alignment.centerLeft,
-                      child: const Text("Set PassCode",style: TextStyle(color: app_color.text,fontSize: 16),)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("Set PassCode",style: TextStyle(color: app_color.text,fontSize: 16),),
+                          Text("default Passcode : 0000",style: TextStyle(color: Colors.black54,fontSize: 14),),
+                        ],
+                      )),
                 ),
                 SwitchListTile(
                   title: const Text("App Lock", style: TextStyle(color: app_color.text,fontSize: 16)),
