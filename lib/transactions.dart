@@ -401,7 +401,7 @@ class _TransactionState extends State<Transaction> {
                           animation: true,
                           lineHeight: 20.0,
                           animationDuration: 2000,
-                          percent: expense! <= income! ? 1 - expense! / income! : expense! / income! - 1,
+                          percent: expense! <= income! ? (1 - expense! / income!) : (expense! / income! - 1),
                           center: income! - expense! < 0 ?
                           Text(
                             "${income! - expense!}",

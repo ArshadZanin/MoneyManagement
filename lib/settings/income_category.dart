@@ -16,7 +16,6 @@ class _IncomeCategoryState extends State<IncomeCategory> {
 
   late DatabaseHandlerIncomeCategory handler;
 
-  int delete = 0;
 
   @override
   void initState() {
@@ -50,48 +49,6 @@ class _IncomeCategoryState extends State<IncomeCategory> {
           actions: [
             IconButton(
               onPressed: (){
-                if(delete == 0){
-                  showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Are you sure?'),
-                        content: const Text('Swap the data right to left to delete....'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: (){
-                              setState(() {
-                                delete = 0;
-                              });
-                              Navigator.pop(context, 'Cancel');
-                              },
-                            child: const Text('Cancel',style: TextStyle(color: Colors.black),),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.pop(context, 'OK');
-                            },
-                            child: const Text('OK',style: TextStyle(color: Colors.red),),
-                          ),
-                        ],
-                      ),);
-                }
-                setState(() {
-                  delete == 0 ? delete = 1 : delete = 0;
-                });
-                debugPrint("delete clicked $delete");
-              },
-              icon: delete == 0 ?
-              const Icon(
-                Icons.delete_outlined,
-                color: Colors.white,
-              ):
-              const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
-            ),
-            IconButton(
-              onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const AddIncomeData()));
                 debugPrint("options clicked");
               },
@@ -110,7 +67,28 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Dismissible(
-                    direction: delete == 1 ? DismissDirection.endToStart : DismissDirection.none,
+                    confirmDismiss: (DismissDirection direction) async {
+                      return await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Confirm"),
+                            content: const Text("Are you sure you wish to delete this item?"),
+                            actions: <Widget>[
+                              FlatButton(
+                                  onPressed: () => Navigator.of(context).pop(true),
+                                  child: const Text("DELETE",style: TextStyle(color: Colors.red),)
+                              ),
+                              FlatButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text("CANCEL"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    direction: DismissDirection.endToStart,
                     background: Container(
                       color: Colors.red,
                       alignment: Alignment.centerRight,

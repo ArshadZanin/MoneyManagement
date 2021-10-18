@@ -6,6 +6,7 @@ import 'package:money_management/db/database_reminder.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:money_management/onboard_anime/welcome_page.dart';
 import 'package:money_management/splash%20screen/splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'fading_sliding_widget.dart';
 import 'onboard_page.dart';
@@ -145,12 +146,25 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
                 DatabaseHandlerExpenseCategory db2 = DatabaseHandlerExpenseCategory();
                 await db2.insertExpenseCategory(listofExpenseCategoryDb);
 
-                PasscodeDb user3 = PasscodeDb(passcode: '0000', checks: "false");
-                List<PasscodeDb> listofPasscodeDb = [user3];
-                DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
-                await db3.insertPasscode(listofPasscodeDb);
+                // PasscodeDb user3 = PasscodeDb(passcode: '0000', checks: "false");
+                // List<PasscodeDb> listofPasscodeDb = [user3];
+                // DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
+                // await db3.insertPasscode(listofPasscodeDb);
 
-                TimeDb user = TimeDb(time: "7:15 AM",reminder: "false");
+                addBoolFalse() async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('boolValue', false);
+                  debugPrint("set False");
+                }
+                addBoolFalse();
+                addStringToSF(String passcode) async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setString('stringValue', passcode);
+                }
+                addStringToSF("0000");
+
+
+                TimeDb user = TimeDb(time: "9:00 PM",reminder: "false");
                 List<TimeDb> listofTimeDb = [user];
                 DatabaseHandlerTime db0 = DatabaseHandlerTime();
                 await db0.insertReminder(listofTimeDb);

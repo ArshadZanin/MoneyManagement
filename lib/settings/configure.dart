@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/db/database_reminder.dart';
-import 'package:money_management/home.dart';
-import 'package:money_management/main.dart';
 import 'package:money_management/settings/expense_category.dart';
 import 'package:money_management/settings/income_category.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,6 +9,7 @@ import 'package:money_management/color/app_color.dart' as app_color;
 import 'package:money_management/settings/passcode.dart';
 import 'package:money_management/splash%20screen/splash_screen.dart';
 import 'package:money_management/transaction/add_transaction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -23,11 +22,32 @@ class Configure extends StatefulWidget {
 
 class _ConfigureState extends State<Configure> {
 
+  ///set bool of passcode///
+  addBoolTrue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('boolValue', true);
+    debugPrint("set True");
+  }
+  addBoolFalse() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('boolValue', false);
+    debugPrint("set False");
+  }
+  getBoolValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    bool? boolValue = prefs.getBool('boolValue');
+    return boolValue;
+  }
+
+
+
+
   FlutterLocalNotificationsPlugin? appNotification;
 
-  TimeOfDay _time = const TimeOfDay(hour: 7, minute: 15);
+  TimeOfDay _time = const TimeOfDay(hour: 21, minute: 00);
 
-  String? dates = "7:15 AM";
+  String? dates = "9:00 PM";
 
   bool? reminder = false;
   bool finger = false;
@@ -42,15 +62,20 @@ class _ConfigureState extends State<Configure> {
   void initState() {
     super.initState();
 
+    SharedPreferences.getInstance().whenComplete(()async{
+      finger = await getBoolValuesSF();
+    });
+
+
     ///passcode check///
-      handlerpasscode = DatabaseHandlerPasscode();
-      handlerpasscode.initializeDB().whenComplete(() async {
-        passcode = (await handlerpasscode.retrievePasscode())!;
-        finger = (await handlerpasscode.retrieveCheck())!;
-        debugPrint("$finger");
-        // await this.addUsers();
-        setState(() {});
-      });
+    //   handlerpasscode = DatabaseHandlerPasscode();
+    //   handlerpasscode.initializeDB().whenComplete(() async {
+    //     passcode = (await handlerpasscode.retrievePasscode())!;
+    //     finger = (await handlerpasscode.retrieveCheck())!;
+    //     debugPrint("$finger");
+    //     // await this.addUsers();
+    //     setState(() {});
+    //   });
 
     ///notification settings///
     var androidInitilize = const AndroidInitializationSettings('app_icon');
@@ -83,6 +108,7 @@ class _ConfigureState extends State<Configure> {
     });
   }
 
+  @Deprecated("Notification")
   _showNotification(String dates) async {
     var androidDetails = const AndroidNotificationDetails("Channel ID", "Programmer");
     var iOsDetails = const IOSNotificationDetails();
@@ -137,6 +163,7 @@ class _ConfigureState extends State<Configure> {
     }
   }
 
+  @Deprecated("message")
   void _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
       context: context,
@@ -171,6 +198,7 @@ class _ConfigureState extends State<Configure> {
   }
 
 
+  @Deprecated("message")
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,11 +267,16 @@ class _ConfigureState extends State<Configure> {
                   title: const Text("App Lock", style: TextStyle(color: app_color.text,fontSize: 16)),
                   value: finger,
                   onChanged: (bool newValue) async {
-                    PasscodeDb user3 = PasscodeDb(passcode: passcode, checks: "$newValue");
-                    List<PasscodeDb> listofPasscodeDb = [user3];
-                    DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
-                    await db3.insertPasscode(listofPasscodeDb);
+                    // PasscodeDb user3 = PasscodeDb(passcode: passcode, checks: "$newValue");
+                    // List<PasscodeDb> listofPasscodeDb = [user3];
+                    // DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
+                    // await db3.insertPasscode(listofPasscodeDb);
+
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.remove("boolValue");
+
                     setState(() {
+                      finger == false ? addBoolTrue() : addBoolFalse();
                     finger == false ? finger = true : finger = false;
                   });}
                 ),

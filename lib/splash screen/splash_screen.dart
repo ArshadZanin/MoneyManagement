@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/home.dart';
 import 'package:money_management/splash%20screen/security_passcode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen1 extends StatefulWidget {
   const SplashScreen1({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class _SplashScreen1State extends State<SplashScreen1> {
               width: 220,
               child: Center(
                 child: Text(
-                  'Splash Animation',
+                  'MoneyQuipo',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -112,52 +113,70 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
     double _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              AnimatedContainer(
-                  duration: const Duration(milliseconds: 2000),
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  height: _height / _fontSize),
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 1000),
-                opacity: _textOpacity,
-                child: Text(
-                  'Money Management',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: animation1!.value,
+      // backgroundColor: Colors.green,
+      body: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          // color: app_color.widget,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end:
+            Alignment.bottomRight, // 10% of the width, so there are ten blinds.
+            colors: <Color>[
+              Color(0xff00c9af),
+              // Color(0xff11c211),
+              // Color(0xff2ad054),
+              Color(0xff61f680)
+            ], // red to yellow
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                AnimatedContainer(
+                    duration: const Duration(milliseconds: 2000),
+                    curve: Curves.fastLinearToSlowEaseIn,
+                    height: _height / _fontSize),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 1000),
+                  opacity: _textOpacity,
+                  child: Text(
+                    'MoneyQuipo',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: animation1!.value,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Center(
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 2000),
-              curve: Curves.fastLinearToSlowEaseIn,
-              opacity: _containerOpacity,
-              child: AnimatedContainer(
+              ],
+            ),
+            Center(
+              child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 2000),
                 curve: Curves.fastLinearToSlowEaseIn,
-                height: _width / _containerSize,
-                width: _width / _containerSize,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                opacity: _containerOpacity,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 2000),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  height: _width / _containerSize,
+                  width: _width / _containerSize,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                      child: Image.asset('assets/images/app_icon.png',fit: BoxFit.fitHeight,)),
+                  // child: const Icon(Icons.money),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                    child: Image.asset('assets/images/app_icon.png',fit: BoxFit.fitHeight,)),
-                // child: const Icon(Icons.money),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -200,17 +219,33 @@ class _SplashScreen1SubHomeState extends State<SplashScreen1SubHome> {
 
   bool? check = false;
 
+  getBoolValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    bool? boolValue = prefs.getBool('boolValue');
+    return boolValue;
+  }
 
   @override
   void initState() {
     super.initState();
-    handler = DatabaseHandlerPasscode();
-    handler.initializeDB().whenComplete(() async {
-      check = (await handler.retrieveCheck())!;
-      debugPrint("$check");
-      // await this.addUsers();
-      setState(() {});
+
+    SharedPreferences.getInstance().whenComplete(()async{
+      check = await getBoolValuesSF();
+      debugPrint("check : $check");
+      setState(() {
+
+      });
     });
+
+    // handler = DatabaseHandlerPasscode();
+    // handler.initializeDB().whenComplete(() async {
+    //   check = (await handler.retrieveCheck())!;
+    //   debugPrint("$check");
+    //   // await this.addUsers();
+    //   setState(() {});
+    // });
+
   }
 
   @override

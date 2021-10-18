@@ -2,6 +2,7 @@ import 'package:money_management/color/app_color.dart' as app_color;
 import 'package:flutter/material.dart';
 import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/settings/configure.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PassCode extends StatefulWidget {
   const PassCode({Key? key}) : super(key: key);
@@ -11,6 +12,18 @@ class PassCode extends StatefulWidget {
 }
 
 class _PassCodeState extends State<PassCode> {
+
+  ///set passcode to sp///
+  addStringToSF(String passcode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('stringValue', passcode);
+  }
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    String? stringValue = prefs.getString('stringValue');
+    return stringValue;
+  }
 
   DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
 
@@ -26,17 +39,23 @@ class _PassCodeState extends State<PassCode> {
   @override
   void initState() {
     super.initState();
-    handler = DatabaseHandlerPasscode();
-    handler.initializeDB().whenComplete(() async {
 
-      passcode = (await handler.retrievePasscode())!;
+    SharedPreferences.getInstance().whenComplete(()async{
+      passcode = await getStringValuesSF();
       debugPrint(passcode);
       passcode = "";
-      check = (await handler.retrieveCheck())!;
-      debugPrint("$check");
-      // await this.addUsers();
-      setState(() {});
     });
+  //   handler = DatabaseHandlerPasscode();
+  //   handler.initializeDB().whenComplete(() async {
+  //
+  //     passcode = (await handler.retrievePasscode())!;
+  //     debugPrint(passcode);
+  //     passcode = "";
+  //     check = (await handler.retrieveCheck())!;
+  //     debugPrint("$check");
+  //     // await this.addUsers();
+  //     setState(() {});
+  //   });
   }
 
   @override
@@ -186,11 +205,12 @@ class _PassCodeState extends State<PassCode> {
                   if(title == "Confirm Passcode"){
                     if(passcode.length == 4) {
                       if(confirmPasscode == passcode){
-                        PasscodeDb user3 = PasscodeDb(
-                            passcode: passcode, checks: "$check");
-                        List<PasscodeDb> listofPasscodeDb = [user3];
-                        DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
-                        await db3.insertPasscode(listofPasscodeDb);
+                        addStringToSF(passcode);
+                        // PasscodeDb user3 = PasscodeDb(
+                        //     passcode: passcode, checks: "$check");
+                        // List<PasscodeDb> listofPasscodeDb = [user3];
+                        // DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
+                        // await db3.insertPasscode(listofPasscodeDb);
 
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) => const Configure()));

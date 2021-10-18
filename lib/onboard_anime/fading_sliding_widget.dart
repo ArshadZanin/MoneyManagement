@@ -18,7 +18,7 @@ class FadingSlidingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _animationController.drive(
-        Tween<Offset>(begin: Offset(0, 0.5), end: Offset.zero).chain(
+        Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).chain(
           CurveTween(
             curve: interval,
           ),

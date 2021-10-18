@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_management/home.dart';
 import 'package:money_management/color/app_color.dart' as app_color;
 import 'package:money_management/db/database_passcode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class SecurityPasscode extends StatefulWidget {
   const SecurityPasscode({Key? key}) : super(key: key);
@@ -15,6 +17,22 @@ class _SecurityPasscodeState extends State<SecurityPasscode> {
   DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
 
 
+
+  getBoolValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    bool? boolValue = prefs.getBool('boolValue');
+    debugPrint("in sp value : $boolValue");
+    return boolValue;
+  }
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    String? stringValue = prefs.getString('stringValue');
+    debugPrint("passcode in sp : $stringValue");
+    return stringValue;
+  }
+
   int count = 0;
   String passcode = "";
   bool check = false;
@@ -24,21 +42,40 @@ class _SecurityPasscodeState extends State<SecurityPasscode> {
   @override
   void initState() {
     super.initState();
-    handler = DatabaseHandlerPasscode();
-    handler.initializeDB().whenComplete(() async {
 
-      passcodeFromDb = (await handler.retrievePasscode())!;
-      debugPrint(passcodeFromDb);
-      check = (await handler.retrieveCheck())!;
-      debugPrint("$check");
-      // await this.addUsers();
-      setState(() {});
+    SharedPreferences.getInstance().whenComplete(()async{
+      check = await getBoolValuesSF();
     });
+    SharedPreferences.getInstance().whenComplete(()async{
+      passcodeFromDb = await getStringValuesSF();
+      debugPrint(passcode);
+    });
+    if (mounted) { // check whether the state object is in tree
+      setState(() {
+        // make changes here
+      });
+    }
+  // passcodeFromDb = "0000";
+    // handler = DatabaseHandlerPasscode();
+    // handler.initializeDB().whenComplete(() async {
+    //
+    //   passcodeFromDb = (await handler.retrievePasscode())!;
+    //   debugPrint(passcodeFromDb);
+    //   check = (await handler.retrieveCheck())!;
+    //   debugPrint("$check");
+    //   // await this.addUsers();
+    //   setState(() {});
+    // });
   }
 @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    if (mounted) { // check whether the state object is in tree
+      setState(() {
+        // make changes here
+      });
+    }
   }
 
   @Deprecated("message")
