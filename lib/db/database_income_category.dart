@@ -1,6 +1,9 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
-import 'package:sqflite/sqflite.dart';
+
+// Package imports:
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 //income category database
 
@@ -47,7 +50,8 @@ class DatabaseHandlerIncomeCategory {
     );
   }
 
-  Future<int> insertIncomeCategory(List<IncomeCategoryDb> incomeCategories) async {
+  Future<int> insertIncomeCategory(
+      List<IncomeCategoryDb> incomeCategories) async {
     int result = 0;
     final Database db = await initializeDB();
     for (var incomeCategory in incomeCategories) {
@@ -58,7 +62,8 @@ class DatabaseHandlerIncomeCategory {
 
   Future<List<IncomeCategoryDb>> retrieveUsers() async {
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query('incomeCategories');
+    final List<Map<String, Object?>> queryResult =
+        await db.query('incomeCategories');
     return queryResult.map((e) => IncomeCategoryDb.fromMap(e)).toList();
   }
 
@@ -73,14 +78,19 @@ class DatabaseHandlerIncomeCategory {
 
   Future<List<dynamic>> listIncomeCategory() async {
     var dbClient = await initializeDB();
-    var result = await dbClient.rawQuery("SELECT incomeCategory FROM incomeCategories");
+    var result =
+        await dbClient.rawQuery("SELECT incomeCategory FROM incomeCategories");
     var incomeCate = [];
-    for (int x = 0 ; x < result.length; x++) {
+    for (int x = 0; x < result.length; x++) {
       debugPrint("${result[x].values}");
-      incomeCate.add(result[x].values.toString().replaceAll( RegExp(r"\p{P}", unicode: true), ""));
+      incomeCate.add(result[x]
+          .values
+          .toString()
+          .replaceAll(RegExp(r"\p{P}", unicode: true), ""));
     }
     return incomeCate;
   }
+
   Future<void> deleteDb() async {
     final db = await initializeDB();
     await db.rawQuery("delete from incomeCategories");

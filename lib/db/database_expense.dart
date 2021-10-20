@@ -1,6 +1,9 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
-import 'package:sqflite/sqflite.dart';
+
+// Package imports:
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 //expense database
 
@@ -12,18 +15,31 @@ class ExpenseDb {
   final double? amount;
   final String? note;
 
-  ExpenseDb({this.id, this.date, this.account, this.expenseCategory, this.amount, this.note});
+  ExpenseDb(
+      {this.id,
+      this.date,
+      this.account,
+      this.expenseCategory,
+      this.amount,
+      this.note});
 
   ExpenseDb.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        date = res["date"],
-        account = res["account"],
-        expenseCategory = res["expenseCategory"],
-        amount = res["amount"],
-        note = res["amount"];
+      : id = res['id'],
+        date = res['date'],
+        account = res['account'],
+        expenseCategory = res['expenseCategory'],
+        amount = res['amount'],
+        note = res['amount'];
 
   Map<String, Object?> toMap() {
-    return {'id': id, 'date': date, 'account': account, 'expenseCategory': expenseCategory, 'amount': amount, 'note': note};
+    return {
+      'id': id,
+      'date': date,
+      'account': account,
+      'expenseCategory': expenseCategory,
+      'amount': amount,
+      'note': note
+    };
   }
 }
 
@@ -31,7 +47,7 @@ class DatabaseHandlerExpense {
   Database? _database;
 
   Future<Database?> get database async {
-    debugPrint("database getter called");
+    debugPrint('database getter called');
 
     if (_database != null) {
       return _database;
@@ -43,12 +59,15 @@ class DatabaseHandlerExpense {
   }
 
   Future<Database> initializeDB() async {
-    String path = await getDatabasesPath();
+    final String path = await getDatabasesPath();
     return openDatabase(
       join(path, 'expenses.db'),
       onCreate: (database, version) async {
         await database.execute(
-          "CREATE TABLE expense(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, account TEXT NOT NULL, expenseCategory TEXT NOT NULL, amount INTEGER NOT NULL, note TEXT)",
+          'CREATE TABLE expense(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+              ' date TEXT NOT NULL, account TEXT NOT NULL,'
+              ' expenseCategory TEXT NOT NULL, amount INTEGER NOT NULL,'
+              ' note TEXT)',
         );
       },
       version: 1,
@@ -74,7 +93,7 @@ class DatabaseHandlerExpense {
     final db = await initializeDB();
     await db.delete(
       'expenses',
-      where: "id = ?",
+      where: 'id = ?',
       whereArgs: [id],
     );
   }

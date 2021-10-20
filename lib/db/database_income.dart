@@ -1,7 +1,9 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
+// Package imports:
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class TransDb {
   final int? id;
@@ -12,7 +14,14 @@ class TransDb {
   final double? amount;
   final String? note;
 
-  TransDb({this.id,this.trans, this.date, this.account, this.category, this.amount, this.note});
+  TransDb(
+      {this.id,
+      this.trans,
+      this.date,
+      this.account,
+      this.category,
+      this.amount,
+      this.note});
 
   TransDb.fromMap(Map<String, dynamic> res)
       : id = res["id"],
@@ -24,7 +33,15 @@ class TransDb {
         note = res["amount"];
 
   Map<String, Object?> toMap() {
-    return {'id': id,'trans': trans, 'date': date, 'account': account, 'category': category, 'amount': amount, 'note': note};
+    return {
+      'id': id,
+      'trans': trans,
+      'date': date,
+      'account': account,
+      'category': category,
+      'amount': amount,
+      'note': note
+    };
   }
 }
 
@@ -67,7 +84,8 @@ class DatabaseHandler {
 
   Future<List<TransDb>> retrieveUsers() async {
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query('transactions');
+    final List<Map<String, Object?>> queryResult =
+        await db.query('transactions');
     return queryResult.map((e) => TransDb.fromMap(e)).toList();
   }
 

@@ -1,16 +1,17 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:money_management/settings/income_category.dart';
-import 'package:money_management/db/database_income_category.dart';
-import 'package:money_management/color/app_color.dart' as app_color;
 
+// Project imports:
+import 'package:money_management/color/app_color.dart' as app_color;
+import 'package:money_management/db/database_income_category.dart';
+import 'package:money_management/settings/income_category.dart';
 
 class AddIncomeData extends StatefulWidget {
   final IncomeCategoryDb? user;
   final int? userIndex;
 
-
-  const AddIncomeData({this.user, this.userIndex});
+  const AddIncomeData({this.user, this.userIndex,Key? key}) : super(key: key);
 
   @override
   State<AddIncomeData> createState() => _AddIncomeDataState();
@@ -20,7 +21,6 @@ class _AddIncomeDataState extends State<AddIncomeData> {
   String? _incomeCategory;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     super.initState();
@@ -29,14 +29,16 @@ class _AddIncomeDataState extends State<AddIncomeData> {
     }
   }
 
-  Widget _buildItem(){
+  Widget _buildItem() {
     return TextFormField(
       initialValue: _incomeCategory,
-      decoration: const InputDecoration(labelText: 'Income Category',hoverColor: Colors.black,fillColor: Colors.black,focusColor: Colors.black),
+      decoration: const InputDecoration(
+          labelText: 'Income Category',
+          hoverColor: Colors.black,
+          fillColor: Colors.black,
+          focusColor: Colors.black),
       maxLength: 15,
-      style: const TextStyle(
-          color: Colors.black
-      ),
+      style: const TextStyle(color: Colors.black),
       validator: (String? value) {
         if (value!.isEmpty) {
           return 'Category is Required';
@@ -51,7 +53,7 @@ class _AddIncomeDataState extends State<AddIncomeData> {
     );
   }
 
-
+  @Deprecated('message')
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +62,7 @@ class _AddIncomeDataState extends State<AddIncomeData> {
         elevation: 0,
         backgroundColor: const Color(0xFF020925),
         title: const Text(
-          "Add income category",
+          'Add income category',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -70,7 +72,7 @@ class _AddIncomeDataState extends State<AddIncomeData> {
           children: [
             Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
               ),
               padding: const EdgeInsets.all(20),
@@ -81,33 +83,38 @@ class _AddIncomeDataState extends State<AddIncomeData> {
                 ],
               ),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             Center(
               child: FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 color: Colors.red,
-                padding: const EdgeInsets.only(top: 10,bottom: 10,right: 50,left: 50),
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 10, right: 50, left: 50),
                 onPressed: () async {
-                  debugPrint("clicked");
-                  if(!_formKey.currentState!.validate()) {
+                  if (!_formKey.currentState!.validate()) {
                     return;
                   }
 
                   _formKey.currentState!.save();
-                  debugPrint("saved");
-                  IncomeCategoryDb user = IncomeCategoryDb(incomeCategory: _incomeCategory);
+                  final IncomeCategoryDb user =
+                      IncomeCategoryDb(incomeCategory: _incomeCategory);
 
-                  List<IncomeCategoryDb> listofIncomeCategoryDb = [user];
+                  final List<IncomeCategoryDb> listofIncomeCategoryDb = [user];
 
-                  DatabaseHandlerIncomeCategory db = DatabaseHandlerIncomeCategory();
+                  final DatabaseHandlerIncomeCategory db =
+                      DatabaseHandlerIncomeCategory();
 
                   await db.insertIncomeCategory(listofIncomeCategoryDb);
-                  debugPrint("insert");
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const IncomeCategory()));
-                  debugPrint("completed");
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const IncomeCategory()));
                 },
                 child: const Text(
-                  "Save",
+                  'Save',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

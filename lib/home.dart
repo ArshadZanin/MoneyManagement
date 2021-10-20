@@ -1,17 +1,20 @@
-import 'package:animations/animations.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:animations/animations.dart';
+
+// Project imports:
 import 'package:money_management/accounts.dart';
+import 'package:money_management/color/app_color.dart' as app_color;
 import 'package:money_management/db/database_expense_category.dart';
 import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:money_management/onboard_anime/onboard_01.dart';
-import 'package:money_management/transaction/add_transaction.dart';
 import 'package:money_management/settings.dart';
 import 'package:money_management/stats.dart';
+import 'package:money_management/transaction/add_transaction.dart';
 import 'package:money_management/transactions.dart';
-import 'package:money_management/color/app_color.dart' as app_color;
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -20,12 +23,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   DatabaseHandler handler = DatabaseHandler();
   DatabaseHandlerIncomeCategory handler1 = DatabaseHandlerIncomeCategory();
   DatabaseHandlerExpenseCategory handler2 = DatabaseHandlerExpenseCategory();
-
 
   TabController? controller;
   @override
@@ -34,12 +36,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     super.initState();
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
+      handler.retrieveWithCategory('income');
 
-      handler.retrieveWithCategory("income");
-
-      List<User> listDatabase = await handler.retrieveUsers();
-      if(listDatabase.isEmpty){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Onboard()));
+      final List<User> listDatabase = await handler.retrieveUsers();
+      if (listDatabase.isEmpty) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const Onboard()));
       }
 
       setState(() {});
@@ -52,7 +54,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,12 +61,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       backgroundColor: app_color.back,
       body: TabBarView(
         controller: controller,
-        children: const [
-          Transaction(),
-          Accounts(),
-          Stats(),
-          Settings()
-        ],
+        children: const [Transaction(), Accounts(), Stats(), Settings()],
       ),
       bottomNavigationBar: Container(
         color: app_color.widget,
@@ -94,17 +90,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ],
         ),
       ),
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 30.0),
         child: FloatingActionButton(
           backgroundColor: app_color.widget,
           child: OpenContainer(
             transitionDuration: const Duration(milliseconds: 400),
-            closedBuilder: (_, openContainer){
+            closedBuilder: (_, openContainer) {
               return const Center(
-                child: Icon(Icons.add,color: Colors.black,size: 32.0,),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.black,
+                  size: 32.0,
+                ),
               );
             },
             openColor: Colors.white,
@@ -113,22 +112,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               borderRadius: BorderRadius.circular(20),
             ),
             closedColor: Colors.white,
-            openBuilder: (_, closeContainer){
+            openBuilder: (_, closeContainer) {
               return const Scaffold(
                 body: AddTrans(),
               );
             },
           ),
-          // const Center(
-          //   child: Icon(
-          //     Icons.add,
-          //     color: Colors.black,
-          //     size: 32.0,
-          //   ),
-          // ),
           onPressed: () {
-            debugPrint("Add Data Clicked");
-            Navigator.push(context, MaterialPageRoute(builder: (_) => const AddTrans()));
+            debugPrint('Add Data Clicked');
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const AddTrans()));
           },
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(

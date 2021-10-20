@@ -1,6 +1,9 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+
+// Package imports:
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 //income category database
 
@@ -9,7 +12,7 @@ class TimeDb {
   final String? time;
   final String? reminder;
 
-  TimeDb({this.id, this.time,this.reminder});
+  TimeDb({this.id, this.time, this.reminder});
 
   TimeDb.fromMap(Map<String, dynamic> res)
       : id = res["id"],
@@ -83,7 +86,8 @@ class DatabaseHandlerTime {
     String? time;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT time FROM reminders");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT time FROM reminders");
     var last = categoryList.length - 1;
     debugPrint("last time :  ${categoryList[last].values}");
     time = categoryList[last].values.toString();
@@ -95,25 +99,26 @@ class DatabaseHandlerTime {
     String? reminder;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT reminder FROM reminders");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT reminder FROM reminders");
     var last = categoryList.length - 1;
     debugPrint("last reminder :  ${categoryList[last].values}");
     reminder = categoryList[last].values.toString();
     reminder = reminder.replaceAll("(", "").replaceAll(")", "");
     debugPrint(reminder);
-    if(reminder == 'false'){
+    if (reminder == 'false') {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
-
 
   Future<int?> retrieveWithId() async {
     String? id;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT id FROM reminders");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT id FROM reminders");
     var last = categoryList.length - 1;
     debugPrint("last time :  ${categoryList[last].values}");
     id = categoryList[last].values.toString();

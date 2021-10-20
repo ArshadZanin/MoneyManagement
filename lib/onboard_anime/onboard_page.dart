@@ -1,14 +1,17 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:lottie/lottie.dart';
 
+// Project imports:
 import 'fading_sliding_widget.dart';
 import 'onboard_page_item.dart';
-
 
 class OnboardPage extends StatefulWidget {
   final OnboardPageItem? onboardPageItem;
 
-  OnboardPage({this.onboardPageItem});
+  const OnboardPage({this.onboardPageItem,Key? key}) : super(key: key);
 
   @override
   _OnboardState createState() => _OnboardState();
@@ -32,8 +35,8 @@ class _OnboardState extends State<OnboardPage>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Container(
       padding: EdgeInsets.only(top: height * 0.15),
       child: Column(

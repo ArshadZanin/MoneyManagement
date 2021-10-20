@@ -1,9 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:money_management/db/database_transaction.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:money_management/color/app_color.dart' as app_color;
 
+// Package imports:
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+// Project imports:
+import 'package:money_management/color/app_color.dart' as app_color;
+import 'package:money_management/db/database_transaction.dart';
 
 class Stats extends StatefulWidget {
   const Stats({Key? key}) : super(key: key);
@@ -13,13 +17,12 @@ class Stats extends StatefulWidget {
 }
 
 class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
-  late final _date = DateFormat('MMM yyyy').format(DateTime.now());
   late final _dateToday = DateFormat('MMM dd, yyyy').format(DateTime.now());
   late final _dateYear = DateFormat('yyyy').format(DateTime.now());
   late final _dateMonth = DateFormat('MMM').format(DateTime.now());
 
   TabController? controller;
-  String _value = "Monthly";
+  String _value = 'Monthly';
 
   void _value1(String value) {
     setState(() {
@@ -34,11 +37,11 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
 
   List<_PieData> pieData1() {
     debugPrint(_value);
-    if (_value == "Total") {
+    if (_value == 'Total') {
       return pieDataTotalIncome;
-    }else if(_value == "Today"){
+    } else if (_value == 'Today') {
       return pieDataTodayIncome;
-    }else if(_value == "Annually"){
+    } else if (_value == 'Annually') {
       return pieDataAnnuallyIncome;
     } else {
       return pieDataMonthlyIncome;
@@ -47,11 +50,11 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
 
   List<_PieData> pieData2() {
     debugPrint(_value);
-    if (_value == "Total") {
+    if (_value == 'Total') {
       return pieDataTotalExpense;
-    }else if(_value == "Today"){
+    } else if (_value == 'Today') {
       return pieDataTodayExpense;
-    }else if(_value == "Annually"){
+    } else if (_value == 'Annually') {
       return pieDataAnnuallyExpense;
     } else {
       return pieDataMonthlyExpense;
@@ -64,178 +67,203 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
     controller = TabController(length: 2, vsync: this);
     handler = DatabaseHandler();
     handler.initializeDB().whenComplete(() async {
-
       ///take database list to here///
-      List<Map<String, Object?>> databaseList = await handler.retrieveUsersDatabase();
-      debugPrint("hello : $databaseList");
-
+      final List<Map<String, Object?>> databaseList =
+          await handler.retrieveUsersDatabase();
+      debugPrint('hello : $databaseList');
 
       ///income today///
-      Set<String> categorySet = {};
-      for(int i = 0; i < databaseList.length; i++){
-        if(databaseList[i]["trans"] == "income"){
-          String data = databaseList[i]["category"].toString();
+      final Set<String> categorySet = {};
+      for (int i = 0; i < databaseList.length; i++) {
+        if (databaseList[i]['trans'] == 'income') {
+          final String data = databaseList[i]['category'].toString();
           categorySet.add(data);
         }
       }
-      List<String> listCategory = [...categorySet.toList()];
-      Map<String, double> categoryAmount = {};
-      for(int i = 0; i < categorySet.length; i++){
+      final List<String> listCategory = [...categorySet.toList()];
+      final Map<String, double> categoryAmount = {};
+      for (int i = 0; i < categorySet.length; i++) {
         double total = 0;
-        for(int j = 0; j < databaseList.length; j++ ){
-          if(databaseList[j]['date'] == _dateToday && databaseList[j]['category'] == listCategory[i]){
-            double value = double.parse(databaseList[j]["amount"].toString());
+        for (int j = 0; j < databaseList.length; j++) {
+          if (databaseList[j]['date'] == _dateToday &&
+              databaseList[j]['category'] == listCategory[i]) {
+            final double value = double.parse(databaseList[j]['amount']
+                .toString());
             total = total + value;
           }
         }
         categoryAmount.addAll({listCategory[i]: total});
       }
       for (int i = 0; i < categoryAmount.length; i++) {
-        pieDataTodayIncome.add(
-            _PieData(categoryAmount.keys.toList()[i], categoryAmount.values.toList()[i]));
+        pieDataTodayIncome.add(_PieData(categoryAmount.keys.toList()[i],
+            categoryAmount.values.toList()[i]));
       }
 
       ///expense today///
-      Set<String> categorySet1 = {};
-      for(int i = 0; i < databaseList.length; i++){
-        if(databaseList[i]["trans"] == "expense"){
-          String data = databaseList[i]["category"].toString();
+      final Set<String> categorySet1 = {};
+      for (int i = 0; i < databaseList.length; i++) {
+        if (databaseList[i]['trans'] == 'expense') {
+          final String data = databaseList[i]['category'].toString();
           categorySet1.add(data);
         }
       }
-      List<String> listCategory1 = [...categorySet1.toList()];
-      Map<String, double> categoryAmount1 = {};
-      for(int i = 0; i < categorySet1.length; i++){
+      final List<String> listCategory1 = [...categorySet1.toList()];
+      final Map<String, double> categoryAmount1 = {};
+      for (int i = 0; i < categorySet1.length; i++) {
         double total = 0;
-        for(int j = 0; j < databaseList.length; j++ ){
-          if(databaseList[j]['date'] == _dateToday && databaseList[j]['category'] == listCategory1[i]){
-            double value = double.parse(databaseList[j]["amount"].toString());
+        for (int j = 0; j < databaseList.length; j++) {
+          if (databaseList[j]['date'] == _dateToday &&
+              databaseList[j]['category'] == listCategory1[i]) {
+            final double value = double.parse(databaseList[j]['amount']
+                .toString());
             total = total + value;
           }
         }
         categoryAmount1.addAll({listCategory1[i]: total});
       }
       for (int i = 0; i < categoryAmount1.length; i++) {
-        pieDataTodayExpense.add(
-            _PieData(categoryAmount1.keys.toList()[i], categoryAmount1.values.toList()[i]));
+        pieDataTodayExpense.add(_PieData(categoryAmount1.keys.toList()[i],
+            categoryAmount1.values.toList()[i]));
       }
 
       ///income month///
-      Set<String> categorySet2 = {};
-      for(int i = 0; i < databaseList.length; i++){
-        if(databaseList[i]["trans"] == "income"){
-          String data = databaseList[i]["category"].toString();
+      final Set<String> categorySet2 = {};
+      for (int i = 0; i < databaseList.length; i++) {
+        if (databaseList[i]['trans'] == 'income') {
+          final String data = databaseList[i]['category'].toString();
           categorySet2.add(data);
         }
       }
-      List<String> listCategory2 = [...categorySet2.toList()];
-      Map<String, double> categoryAmount2 = {};
-      for(int i = 0; i < categorySet2.length; i++){
+      final List<String> listCategory2 = [...categorySet2.toList()];
+      final Map<String, double> categoryAmount2 = {};
+      for (int i = 0; i < categorySet2.length; i++) {
         double total = 0;
-        for(int j = 0; j < databaseList.length; j++ ){
-          String dateIs = databaseList[j]['date'].toString().substring(0, databaseList[j]['date'].toString().length - 9);
-          String dateLast = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
-          if(dateIs == _dateMonth && dateLast == _dateYear && databaseList[j]['category'] == listCategory2[i]){
-            double value = double.parse(databaseList[j]["amount"].toString());
+        for (int j = 0; j < databaseList.length; j++) {
+          final String dateIs = databaseList[j]['date']
+              .toString()
+              .substring(0, databaseList[j]['date'].toString().length - 9);
+          final String dateLast = databaseList[j]['date']
+              .toString()
+              .substring(8, databaseList[j]['date'].toString().length);
+          if (dateIs == _dateMonth &&
+              dateLast == _dateYear &&
+              databaseList[j]['category'] == listCategory2[i]) {
+            final double value = double.parse(databaseList[j]['amount']
+                .toString());
             total = total + value;
           }
         }
         categoryAmount2.addAll({listCategory2[i]: total});
       }
       for (int i = 0; i < categoryAmount2.length; i++) {
-        pieDataMonthlyIncome.add(
-            _PieData(categoryAmount2.keys.toList()[i], categoryAmount2.values.toList()[i]));
+        pieDataMonthlyIncome.add(_PieData(categoryAmount2.keys.toList()[i],
+            categoryAmount2.values.toList()[i]));
       }
 
-
       ///expense month///
-      Set<String> categorySet3 = {};
-      for(int i = 0; i < databaseList.length; i++){
-        if(databaseList[i]["trans"] == "expense"){
-          String data = databaseList[i]["category"].toString();
+      final Set<String> categorySet3 = {};
+      for (int i = 0; i < databaseList.length; i++) {
+        if (databaseList[i]['trans'] == 'expense') {
+          final String data = databaseList[i]['category'].toString();
           categorySet3.add(data);
         }
       }
-      List<String> listCategory3 = [...categorySet3.toList()];
-      Map<String, double> categoryAmount3 = {};
-      for(int i = 0; i < categorySet3.length; i++){
+      final List<String> listCategory3 = [...categorySet3.toList()];
+      final Map<String, double> categoryAmount3 = {};
+      for (int i = 0; i < categorySet3.length; i++) {
         double total = 0;
-        for(int j = 0; j < databaseList.length; j++ ){
-          String dateIs = databaseList[j]['date'].toString().substring(0, databaseList[j]['date'].toString().length - 9);
-          String dateLast = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
-          if(dateIs == _dateMonth && dateLast == _dateYear && databaseList[j]['category'] == listCategory3[i]){
-            double value = double.parse(databaseList[j]["amount"].toString());
+        for (int j = 0; j < databaseList.length; j++) {
+          final String dateIs = databaseList[j]['date']
+              .toString()
+              .substring(0, databaseList[j]['date'].toString().length - 9);
+          final String dateLast = databaseList[j]['date']
+              .toString()
+              .substring(8, databaseList[j]['date'].toString().length);
+          if (dateIs == _dateMonth &&
+              dateLast == _dateYear &&
+              databaseList[j]['category'] == listCategory3[i]) {
+            final double value = double.parse(databaseList[j]['amount']
+                .toString());
             total = total + value;
           }
         }
         categoryAmount3.addAll({listCategory3[i]: total});
       }
       for (int i = 0; i < categoryAmount3.length; i++) {
-        pieDataMonthlyExpense.add(
-            _PieData(categoryAmount3.keys.toList()[i], categoryAmount3.values.toList()[i]));
+        pieDataMonthlyExpense.add(_PieData(categoryAmount3.keys.toList()[i],
+            categoryAmount3.values.toList()[i]));
       }
 
       ///income year///
-      Set<String> categorySet4 = {};
-      for(int i = 0; i < databaseList.length; i++){
-        if(databaseList[i]["trans"] == "income"){
-          String data = databaseList[i]["category"].toString();
+      final Set<String> categorySet4 = {};
+      for (int i = 0; i < databaseList.length; i++) {
+        if (databaseList[i]['trans'] == 'income') {
+          final String data = databaseList[i]['category'].toString();
           categorySet4.add(data);
         }
       }
-      List<String> listCategory4 = [...categorySet4.toList()];
-      Map<String, double> categoryAmount4 = {};
-      for(int i = 0; i < categorySet4.length; i++){
+      final List<String> listCategory4 = [...categorySet4.toList()];
+      final Map<String, double> categoryAmount4 = {};
+      for (int i = 0; i < categorySet4.length; i++) {
         double total = 0;
-        for(int j = 0; j < databaseList.length; j++ ){
-          String dateIs = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
-          debugPrint("Date is : $dateIs");
-          if(dateIs == _dateYear && databaseList[j]['category'] == listCategory4[i]){
-            double value = double.parse(databaseList[j]["amount"].toString());
+        for (int j = 0; j < databaseList.length; j++) {
+          final String dateIs = databaseList[j]['date']
+              .toString()
+              .substring(8, databaseList[j]['date'].toString().length);
+          debugPrint('Date is : $dateIs');
+          if (dateIs == _dateYear &&
+              databaseList[j]['category'] == listCategory4[i]) {
+            final double value = double.parse(databaseList[j]['amount']
+                .toString());
             total = total + value;
           }
         }
         categoryAmount4.addAll({listCategory4[i]: total});
       }
       for (int i = 0; i < categoryAmount4.length; i++) {
-        pieDataAnnuallyIncome.add(
-            _PieData(categoryAmount4.keys.toList()[i], categoryAmount4.values.toList()[i]));
+        pieDataAnnuallyIncome.add(_PieData(categoryAmount4.keys.toList()[i],
+            categoryAmount4.values.toList()[i]));
       }
 
       ///expense year///
-      Set<String> categorySet5 = {};
-      for(int i = 0; i < databaseList.length; i++){
-        if(databaseList[i]["trans"] == "expense"){
-          String data = databaseList[i]["category"].toString();
+      final Set<String> categorySet5 = {};
+      for (int i = 0; i < databaseList.length; i++) {
+        if (databaseList[i]['trans'] == 'expense') {
+          final String data = databaseList[i]['category'].toString();
           categorySet5.add(data);
         }
       }
-      List<String> listCategory5 = [...categorySet5.toList()];
-      Map<String, double> categoryAmount5 = {};
-      for(int i = 0; i < categorySet5.length; i++){
+      final List<String> listCategory5 = [...categorySet5.toList()];
+      final Map<String, double> categoryAmount5 = {};
+      for (int i = 0; i < categorySet5.length; i++) {
         double total = 0;
-        for(int j = 0; j < databaseList.length; j++ ){
-          String dateIs = databaseList[j]['date'].toString().substring(8, databaseList[j]['date'].toString().length);
-          if(dateIs == _dateYear && databaseList[j]['category'] == listCategory5[i]){
-            double value = double.parse(databaseList[j]["amount"].toString());
+        for (int j = 0; j < databaseList.length; j++) {
+          final String dateIs = databaseList[j]['date']
+              .toString()
+              .substring(8, databaseList[j]['date'].toString().length);
+          if (dateIs == _dateYear &&
+              databaseList[j]['category'] == listCategory5[i]) {
+            final double value = double.parse(databaseList[j]['amount']
+                .toString());
             total = total + value;
           }
         }
         categoryAmount5.addAll({listCategory5[i]: total});
       }
       for (int i = 0; i < categoryAmount5.length; i++) {
-        pieDataAnnuallyExpense.add(
-            _PieData(categoryAmount5.keys.toList()[i], categoryAmount5.values.toList()[i]));
+        pieDataAnnuallyExpense.add(_PieData(categoryAmount5.keys.toList()[i],
+            categoryAmount5.values.toList()[i]));
       }
 
       ///income total///
-      totalData = await handler.retrieveWithCategory("income");
+      totalData = await handler.retrieveWithCategory('income');
       for (int i = 0; i < totalData.length; i++) {
         pieDataTotalIncome.add(
             _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
       }
+
       ///expense total///
-      totalData = await handler.retrieveWithCategory("expense");
+      totalData = await handler.retrieveWithCategory('expense');
       for (int i = 0; i < totalData.length; i++) {
         pieDataTotalExpense.add(
             _PieData(totalData.keys.toList()[i], totalData.values.toList()[i]));
@@ -259,7 +287,6 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
   List<_PieData> pieDataAnnuallyIncome = [];
   List<_PieData> pieDataAnnuallyExpense = [];
 
-
   @override
   void dispose() {
     controller!.dispose();
@@ -275,10 +302,10 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
     // else if (_value == 'Weekly') {
     //   return Text(_date);
     // }
-    else if (_value == "Today") {
+    else if (_value == 'Today') {
       return Text(_dateToday);
     } else {
-      return const Text("Total");
+      return const Text('Total');
     }
   }
 
@@ -338,10 +365,10 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
           indicatorColor: Colors.red[900],
           tabs: const [
             Tab(
-              text: "Income",
+              text: 'Income',
             ),
             Tab(
-              text: "Expense",
+              text: 'Expense',
             ),
           ],
         ),
@@ -349,9 +376,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: controller,
         children: [
-
           ///income///
-
 
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -359,17 +384,24 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
               // const SizedBox(height: 30,),
 
               const Center(
-                child: Text("Income Stats by category",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+                child: Text(
+                  'Income Stats by category',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
 
               //Initialize the chart widget
               Center(
-                child: pieData1().isNotEmpty ?
-                SfCircularChart(
+                child: pieData1().isNotEmpty
+                    ? SfCircularChart(
                         // title: ChartTitle(text: 'Income Stats by category'),
                         legend: Legend(
-                          // alignment: ChartAlignment.near,
-                            isVisible: true, backgroundColor: Colors.white),
+                            // alignment: ChartAlignment.near,
+                            isVisible: true,
+                            backgroundColor: Colors.white),
                         series: <PieSeries<_PieData, String>>[
                             PieSeries<_PieData, String>(
                                 explode: true,
@@ -378,7 +410,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                                 xValueMapper: (_PieData data, _) => data.xData,
                                 yValueMapper: (_PieData data, _) => data.yData,
                                 dataLabelMapper: (_PieData data, _) =>
-                                    "${data.yData}",
+                                    '${data.yData}',
                                 dataLabelSettings:
                                     const DataLabelSettings(isVisible: true)),
                           ])
@@ -386,18 +418,22 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                         padding: const EdgeInsets.only(top: 100),
                         child: const Center(
                           child: Text(
-                            "No data available!!",
+                            'No data available!!',
                             style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                         ),
                       ),
               ),
-              const SizedBox(height: 30,),const SizedBox(height: 30,),
+              const SizedBox(
+                height: 30,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
             ],
           ),
 
           ///expense///
-
 
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -405,12 +441,18 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
               // const SizedBox(height: 30,),
 
               const Center(
-                child: Text("Expense Stats by category",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+                child: Text(
+                  'Expense Stats by category',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
 
               Center(
-                child: pieData2().isNotEmpty ?
-                SfCircularChart(
+                child: pieData2().isNotEmpty
+                    ? SfCircularChart(
                         // title: ChartTitle(text: 'Expense Stats by category'),
                         legend: Legend(
                             isVisible: true, backgroundColor: Colors.white),
@@ -422,7 +464,7 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                                 xValueMapper: (_PieData data, _) => data.xData,
                                 yValueMapper: (_PieData data, _) => data.yData,
                                 dataLabelMapper: (_PieData data, _) =>
-                                    "${data.yData}",
+                                    '${data.yData}',
                                 dataLabelSettings:
                                     const DataLabelSettings(isVisible: true)),
                           ])
@@ -430,13 +472,18 @@ class _StatsState extends State<Stats> with SingleTickerProviderStateMixin {
                         padding: const EdgeInsets.only(top: 100),
                         child: const Center(
                           child: Text(
-                            "No data available!!",
+                            'No data available!!',
                             style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                         ),
                       ),
               ),
-              const SizedBox(height: 30,),const SizedBox(height: 30,),
+              const SizedBox(
+                height: 30,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
             ],
           ),
         ],

@@ -1,17 +1,20 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+// Project imports:
 import 'package:money_management/db/database_expense_category.dart';
 import 'package:money_management/db/database_income_category.dart';
-import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/db/database_reminder.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:money_management/onboard_anime/welcome_page.dart';
 import 'package:money_management/splash%20screen/splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'fading_sliding_widget.dart';
 import 'onboard_page.dart';
 import 'onboard_page_item.dart';
-
 
 class Onboard extends StatefulWidget {
   const Onboard({Key? key}) : super(key: key);
@@ -21,7 +24,6 @@ class Onboard extends StatefulWidget {
 }
 
 class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
-
   DatabaseHandler handler = DatabaseHandler();
   DatabaseHandlerIncomeCategory handler1 = DatabaseHandlerIncomeCategory();
   DatabaseHandlerExpenseCategory handler2 = DatabaseHandlerExpenseCategory();
@@ -29,11 +31,15 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
   List<OnboardPageItem> onboardPageItems = [
     OnboardPageItem(
       lottieAsset: 'assets/animations/add.json',
-      text: 'You can add income and expenses with different accounts in different categories',
+      text:
+          'You can add income and expenses with'
+              ' different accounts in different categories',
     ),
     OnboardPageItem(
       lottieAsset: 'assets/animations/calculating.json',
-      text: 'You can calculate and manage expenses and incomes or assets and liabilities',
+      text:
+          'You can calculate and manage expenses'
+              ' and incomes or assets and liabilities',
       animationDuration: const Duration(milliseconds: 1100),
     ),
     OnboardPageItem(
@@ -55,7 +61,7 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
     _pageController = PageController();
     _pageController!.addListener(() {
       _activeIndex = _pageController!.page;
-      debugPrint("Active Index: $_activeIndex");
+      debugPrint('Active Index: $_activeIndex');
       if (_activeIndex! >= 0.5 && onboardPage == false) {
         setState(() {
           onboardPage = true;
@@ -72,7 +78,7 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
-  initializePages() {
+  void initializePages() {
     onboardItems.add(const WelcomePage()); // welcome page
     for (var onboardPageItem in onboardPageItems) {
       //adding onboard pages
@@ -84,8 +90,8 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -117,14 +123,14 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
             bottom: 20,
             child: GestureDetector(
               onTap: () async {
-                User student = User(
+                final User student = User(
                     trans: 'income',
                     date: 'Jan 01, 2015',
                     account: 'Assets',
                     category: 'Cash',
                     amount: '0',
                     note: 'it not affect the user');
-                User student1 = User(
+                final User student1 = User(
                     trans: 'expense',
                     date: 'Jan 01, 2015',
                     account: 'Liabilities',
@@ -132,44 +138,47 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
                     amount: '0',
                     note: 'it not affect the user');
 
-                List<User> listOfUser = [student,student1];
-                DatabaseHandler db = DatabaseHandler();
+                final List<User> listOfUser = [student, student1];
+                final DatabaseHandler db = DatabaseHandler();
                 await db.insertUser(listOfUser);
 
-                IncomeCategoryDb user1 = IncomeCategoryDb(incomeCategory: 'Cash');
-                List<IncomeCategoryDb> listofIncomeCategoryDb = [user1];
-                DatabaseHandlerIncomeCategory db1 = DatabaseHandlerIncomeCategory();
-                await db1.insertIncomeCategory(listofIncomeCategoryDb);
+                final IncomeCategoryDb user1 =
+                    IncomeCategoryDb(incomeCategory: 'Cash');
+                final List<IncomeCategoryDb> listIncomeCategoryDb = [user1];
+                final DatabaseHandlerIncomeCategory db1 =
+                    DatabaseHandlerIncomeCategory();
+                await db1.insertIncomeCategory(listIncomeCategoryDb);
 
-                ExpenseCategoryDb user2 = ExpenseCategoryDb(expenseCategory: 'Food');
-                List<ExpenseCategoryDb> listofExpenseCategoryDb = [user2];
-                DatabaseHandlerExpenseCategory db2 = DatabaseHandlerExpenseCategory();
-                await db2.insertExpenseCategory(listofExpenseCategoryDb);
+                final ExpenseCategoryDb user2 =
+                    ExpenseCategoryDb(expenseCategory: 'Food');
+                final List<ExpenseCategoryDb> listExpenseCategoryDb = [user2];
+                final DatabaseHandlerExpenseCategory db2 =
+                    DatabaseHandlerExpenseCategory();
+                await db2.insertExpenseCategory(listExpenseCategoryDb);
 
-                // PasscodeDb user3 = PasscodeDb(passcode: '0000', checks: "false");
-                // List<PasscodeDb> listofPasscodeDb = [user3];
-                // DatabaseHandlerPasscode db3 = DatabaseHandlerPasscode();
-                // await db3.insertPasscode(listofPasscodeDb);
-
-                addBoolFalse() async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                Future<void> addBoolFalse() async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   prefs.setBool('boolValue', false);
-                  debugPrint("set False");
+                  debugPrint('set False');
                 }
+
                 addBoolFalse();
-                addStringToSF(String passcode) async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                Future<void> addStringToSF(String passcode) async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   prefs.setString('stringValue', passcode);
                 }
-                addStringToSF("0000");
 
+                addStringToSF('0000');
 
-                TimeDb user = TimeDb(time: "9:00 PM",reminder: "false");
-                List<TimeDb> listofTimeDb = [user];
-                DatabaseHandlerTime db0 = DatabaseHandlerTime();
+                final TimeDb user = TimeDb(time: '9:00 PM', reminder: 'false');
+                final List<TimeDb> listofTimeDb = [user];
+                final DatabaseHandlerTime db0 = DatabaseHandlerTime();
                 await db0.insertReminder(listofTimeDb);
 
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
                   return const HomePageAssist();
                 }));
               },
@@ -197,13 +206,13 @@ class _OnboardState extends State<Onboard> with SingleTickerProviderStateMixin {
                     gradient: LinearGradient(
                       colors: onboardPage
                           ? [
-                        const Color(0xFF8200FF),
-                        const Color(0xFFFF3264),
-                      ]
+                              const Color(0xFF8200FF),
+                              const Color(0xFFFF3264),
+                            ]
                           : [
-                        const Color(0xFFFFFFFF),
-                        const Color(0xFFFFFFFF),
-                      ],
+                              const Color(0xFFFFFFFF),
+                              const Color(0xFFFFFFFF),
+                            ],
                     ),
                   ),
                 ),

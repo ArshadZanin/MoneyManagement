@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 class OnboardPageItem {
   String lottieAsset;
@@ -6,7 +5,5 @@ class OnboardPageItem {
   String text;
 
   OnboardPageItem(
-      {required this.lottieAsset,
-        required this.text,
-        this.animationDuration});
+      {required this.lottieAsset, required this.text, this.animationDuration});
 }

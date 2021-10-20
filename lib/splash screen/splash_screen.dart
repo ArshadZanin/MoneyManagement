@@ -1,11 +1,18 @@
+// Dart imports:
 import 'dart:async';
-import 'package:animations/animations.dart';
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:animations/animations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/home.dart';
 import 'package:money_management/splash%20screen/security_passcode.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen1 extends StatefulWidget {
   const SplashScreen1({Key? key}) : super(key: key);
@@ -35,7 +42,7 @@ class _SplashScreen1State extends State<SplashScreen1> {
           openColor: Colors.white,
           closedElevation: 20,
           closedShape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           transitionDuration: const Duration(milliseconds: 700),
           openBuilder: (_, closeContainer) {
             return const SplashScreen1Sub();
@@ -109,8 +116,8 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
 
   @override
   Widget build(BuildContext context) {
-    double _width = MediaQuery.of(context).size.width;
-    double _height = MediaQuery.of(context).size.height;
+    final double _width = MediaQuery.of(context).size.width;
+    final double _height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       // backgroundColor: Colors.green,
@@ -120,8 +127,8 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
           // color: app_color.widget,
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
-            end:
-            Alignment.bottomRight, // 10% of the width, so there are ten blinds.
+            end: Alignment
+                .bottomRight, // 10% of the width, so there are ten blinds.
             colors: <Color>[
               Color(0xff00c9af),
               // Color(0xff11c211),
@@ -169,8 +176,11 @@ class _SplashScreen1SubState extends State<SplashScreen1Sub>
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                      child: Image.asset('assets/images/app_icon.png',fit: BoxFit.fitHeight,)),
+                      borderRadius: BorderRadius.circular(30),
+                      child: Image.asset(
+                        'assets/images/app_icon.png',
+                        fit: BoxFit.fitHeight,
+                      )),
                   // child: const Icon(Icons.money),
                 ),
               ),
@@ -187,23 +197,23 @@ class PageTransition1 extends PageRouteBuilder {
 
   PageTransition1(this.page)
       : super(
-    pageBuilder: (context, animation, anotherAnimation) => page,
-    transitionDuration: const Duration(milliseconds: 2000),
-    transitionsBuilder: (context, animation, anotherAnimation, child) {
-      animation = CurvedAnimation(
-        curve: Curves.fastLinearToSlowEaseIn,
-        parent: animation,
-      );
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: SizeTransition(
-          sizeFactor: animation,
-          child: page,
-          axisAlignment: 0,
-        ),
-      );
-    },
-  );
+          pageBuilder: (context, animation, anotherAnimation) => page,
+          transitionDuration: const Duration(milliseconds: 2000),
+          transitionsBuilder: (context, animation, anotherAnimation, child) {
+            animation = CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn,
+              parent: animation,
+            );
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: SizeTransition(
+                sizeFactor: animation,
+                child: page,
+                axisAlignment: 0,
+              ),
+            );
+          },
+        );
 }
 
 class SplashScreen1SubHome extends StatefulWidget {
@@ -214,15 +224,14 @@ class SplashScreen1SubHome extends StatefulWidget {
 }
 
 class _SplashScreen1SubHomeState extends State<SplashScreen1SubHome> {
-
   DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
 
   bool? check = false;
 
-  getBoolValuesSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<bool?>? getBoolValuesSF() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return bool
-    bool? boolValue = prefs.getBool('boolValue');
+    final bool? boolValue = prefs.getBool('boolValue');
     return boolValue;
   }
 
@@ -230,12 +239,10 @@ class _SplashScreen1SubHomeState extends State<SplashScreen1SubHome> {
   void initState() {
     super.initState();
 
-    SharedPreferences.getInstance().whenComplete(()async{
+    SharedPreferences.getInstance().whenComplete(() async {
       check = await getBoolValuesSF();
-      debugPrint("check : $check");
-      setState(() {
-
-      });
+      debugPrint('check : $check');
+      setState(() {});
     });
 
     // handler = DatabaseHandlerPasscode();
@@ -245,19 +252,16 @@ class _SplashScreen1SubHomeState extends State<SplashScreen1SubHome> {
     //   // await this.addUsers();
     //   setState(() {});
     // });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      check == true ?
-          const SecurityPasscode() :
-      const MyHomePage(),
+      body: check == true ? const SecurityPasscode() : const MyHomePage(),
     );
   }
 }
+
 class HomePageAssist extends StatelessWidget {
   const HomePageAssist({Key? key}) : super(key: key);
 

@@ -1,5 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
 import 'fading_sliding_widget.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -30,8 +32,8 @@ class _WelcomeState extends State<WelcomePage>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
@@ -49,8 +51,8 @@ class _WelcomeState extends State<WelcomePage>
                 shape: CircleBorder(),
                 gradient: LinearGradient(
                   colors: [
-                     Color(0xFF00FFDC),
-                     Color(0xFF5096FE),
+                    Color(0xFF00FFDC),
+                    Color(0xFF5096FE),
                   ],
                 )),
           ),
@@ -65,7 +67,8 @@ class _WelcomeState extends State<WelcomePage>
                 scale: _animationController!.drive(
                   Tween<double>(begin: 0.3, end: 1.0).chain(
                     CurveTween(
-                      curve: const Interval(0.0, 0.2, curve: Curves.elasticInOut),
+                      curve:
+                          const Interval(0.0, 0.2, curve: Curves.elasticInOut),
                     ),
                   ),
                 ),
@@ -73,7 +76,8 @@ class _WelcomeState extends State<WelcomePage>
                   opacity: _animationController!.drive(
                     Tween<double>(begin: 0.0, end: 1.0).chain(
                       CurveTween(
-                        curve: const Interval(0.2, 0.4, curve: Curves.decelerate),
+                        curve:
+                            const Interval(0.2, 0.4, curve: Curves.decelerate),
                       ),
                     ),
                   ),
@@ -81,7 +85,8 @@ class _WelcomeState extends State<WelcomePage>
                     scale: _animationController!.drive(
                       Tween<double>(begin: 1.3, end: 1.0).chain(
                         CurveTween(
-                          curve: const Interval(0.2, 0.4, curve: Curves.elasticInOut),
+                          curve: const Interval(0.2, 0.4,
+                              curve: Curves.elasticInOut),
                         ),
                       ),
                     ),

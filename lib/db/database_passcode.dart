@@ -1,6 +1,9 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+
+// Package imports:
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 //income category database
 
@@ -9,7 +12,7 @@ class PasscodeDb {
   final String? passcode;
   final String? checks;
 
-  PasscodeDb({this.id, this.passcode,this.checks});
+  PasscodeDb({this.id, this.passcode, this.checks});
 
   PasscodeDb.fromMap(Map<String, dynamic> res)
       : id = res["id"],
@@ -65,7 +68,6 @@ class DatabaseHandlerPasscode {
     return queryResult.map((e) => PasscodeDb.fromMap(e)).toList();
   }
 
-
   Future<void> deleteDb() async {
     final db = await initializeDB();
     await db.rawQuery("delete from passcodes");
@@ -75,7 +77,8 @@ class DatabaseHandlerPasscode {
     String? passcode;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT passcode FROM passcodes");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT passcode FROM passcodes");
     var last = categoryList.length - 1;
     debugPrint("last passcode :  ${categoryList[last].values}");
     passcode = categoryList[last].values.toString();
@@ -87,25 +90,26 @@ class DatabaseHandlerPasscode {
     String? check;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT checks FROM passcodes");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT checks FROM passcodes");
     var last = categoryList.length - 1;
     debugPrint("last checks :  ${categoryList[last].values}");
     check = categoryList[last].values.toString();
     check = check.replaceAll("(", "").replaceAll(")", "");
     debugPrint(check);
-    if(check == 'false'){
+    if (check == 'false') {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
-
 
   Future<int?> retrieveWithId() async {
     String? id;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT id FROM passcodes");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT id FROM passcodes");
     var last = categoryList.length - 1;
     debugPrint("last time :  ${categoryList[last].values}");
     id = categoryList[last].values.toString();

@@ -45,6 +45,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   percent_indicator: ^3.4.0
   shared_preferences: ^2.0.8
+  import_sorter: ^4.6.0
 
 dev_dependencies:
   flutter_test:

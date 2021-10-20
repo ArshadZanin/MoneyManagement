@@ -1,6 +1,9 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+
+// Package imports:
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class User {
   final int? id;
@@ -11,7 +14,14 @@ class User {
   final String? amount;
   final String? note;
 
-  User({this.id, this.trans, this.date, this.account, this.category, this.amount, this.note});
+  User(
+      {this.id,
+      this.trans,
+      this.date,
+      this.account,
+      this.category,
+      this.amount,
+      this.note});
 
   User.fromMap(Map<String, dynamic> res)
       : id = res["id"],
@@ -23,7 +33,15 @@ class User {
         note = res["note"];
 
   Map<String, Object?> toMap() {
-    return {'id': id, 'trans': trans, 'date': date, 'account': account, 'category': category, 'amount': amount, 'note': note};
+    return {
+      'id': id,
+      'trans': trans,
+      'date': date,
+      'account': account,
+      'category': category,
+      'amount': amount,
+      'note': note
+    };
   }
 }
 
@@ -98,11 +116,12 @@ class DatabaseHandler {
   Future<String?> calculateIncomeTotal() async {
     String income;
     var dbClient = await initializeDB();
-    var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE trans = ?", ['income']);
+    var result = await dbClient.rawQuery(
+        "SELECT SUM(amount) as Total FROM users WHERE trans = ?", ['income']);
     var listResult = result[0].values.toList();
-    if(listResult[0].toString().isEmpty){
-      income= "0";
-    }else {
+    if (listResult[0].toString().isEmpty) {
+      income = "0";
+    } else {
       income = listResult[0].toString();
     }
     return income;
@@ -111,11 +130,12 @@ class DatabaseHandler {
   Future<String?> calculateExpenseTotal() async {
     String expense;
     var dbClient = await initializeDB();
-    var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE trans = ?", ['expense']);
+    var result = await dbClient.rawQuery(
+        "SELECT SUM(amount) as Total FROM users WHERE trans = ?", ['expense']);
     var listResult = result[0].values.toList();
-    if(listResult[0].toString().isEmpty){
-      expense= "0";
-    }else {
+    if (listResult[0].toString().isEmpty) {
+      expense = "0";
+    } else {
       expense = listResult[0].toString();
     }
     return expense;
@@ -124,11 +144,12 @@ class DatabaseHandler {
   Future<String?> calculateAssetsTotal() async {
     String assets;
     var dbClient = await initializeDB();
-    var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE account = 'Assets'");
+    var result = await dbClient.rawQuery(
+        "SELECT SUM(amount) as Total FROM users WHERE account = 'Assets'");
     var listResult = result[0].values.toList();
-    if(listResult[0].toString().isEmpty){
-      assets= "0";
-    }else {
+    if (listResult[0].toString().isEmpty) {
+      assets = "0";
+    } else {
       assets = listResult[0].toString();
     }
     return assets;
@@ -137,11 +158,12 @@ class DatabaseHandler {
   Future<String?> calculateLiabilitiesTotal() async {
     String liabilities;
     var dbClient = await initializeDB();
-    var result = await dbClient.rawQuery("SELECT SUM(amount) as Total FROM users WHERE account = 'Liabilities'");
+    var result = await dbClient.rawQuery(
+        "SELECT SUM(amount) as Total FROM users WHERE account = 'Liabilities'");
     var listResult = result[0].values.toList();
-    if(listResult[0].toString().isEmpty){
-      liabilities= "0";
-    }else {
+    if (listResult[0].toString().isEmpty) {
+      liabilities = "0";
+    } else {
       liabilities = listResult[0].toString();
     }
     return liabilities;
@@ -155,21 +177,26 @@ class DatabaseHandler {
   Future<Map<String, double>> retrieveWithCategory(String trans) async {
     String? amount;
     final Database db = await initializeDB();
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
     Set<String> categorySet = {};
-    for(int i = 0; i < categoryList.length; i++){
-      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+    for (int i = 0; i < categoryList.length; i++) {
+      String data = categoryList[i]
+          .values
+          .toString()
+          .substring(1, categoryList[i].values.toString().length - 1);
       categorySet.add(data);
     }
     List<String> listCategory = [...categorySet.toList()];
     Map<String, double> categoryAmount = {};
 
-    for(int i = 0; i < listCategory.length; i++){
-      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}'");
+    for (int i = 0; i < listCategory.length; i++) {
+      final List<Map<String, Object?>> queryResult = await db.rawQuery(
+          "SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}'");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString().isEmpty){
-        amount= "0";
-      }else {
+      if (listResult[0].toString().isEmpty) {
+        amount = "0";
+      } else {
         amount = listResult[0].toString();
       }
       double amountLast = double.parse(amount);
@@ -178,14 +205,19 @@ class DatabaseHandler {
     return categoryAmount;
   }
 
-  Future<Map<String, double>> retrieveWithCategoryToday(String trans,String date) async {
+  Future<Map<String, double>> retrieveWithCategoryToday(
+      String trans, String date) async {
     String? amount;
     final Database db = await initializeDB();
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
     debugPrint('$categoryList');
     Set<String> categorySet = {};
-    for(int i = 0; i < categoryList.length; i++){
-      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+    for (int i = 0; i < categoryList.length; i++) {
+      String data = categoryList[i]
+          .values
+          .toString()
+          .substring(1, categoryList[i].values.toString().length - 1);
       categorySet.add(data);
       debugPrint(data);
     }
@@ -193,14 +225,15 @@ class DatabaseHandler {
     debugPrint("$listCategory");
     Map<String, double> categoryAmount = {};
 
-    for(int i = 0; i < listCategory.length; i++){
+    for (int i = 0; i < listCategory.length; i++) {
       debugPrint("Category first: ${listCategory[i]}");
-      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date = '$date'");
+      final List<Map<String, Object?>> queryResult = await db.rawQuery(
+          "SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date = '$date'");
       debugPrint("map result: $queryResult");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString().isEmpty){
-        amount= "0";
-      }else {
+      if (listResult[0].toString().isEmpty) {
+        amount = "0";
+      } else {
         amount = listResult[0].toString();
       }
       debugPrint("amount: $amount");
@@ -212,27 +245,33 @@ class DatabaseHandler {
     return categoryAmount;
   }
 
-  Future<Map<String, double>> retrieveWithCategoryYear(String trans,String date) async {
+  Future<Map<String, double>> retrieveWithCategoryYear(
+      String trans, String date) async {
     String? amount;
     final Database db = await initializeDB();
     debugPrint(date);
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
     debugPrint(date);
     debugPrint("category list: $categoryList");
     Set<String> categorySet = {};
-    for(int i = 0; i < categoryList.length; i++){
-      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+    for (int i = 0; i < categoryList.length; i++) {
+      String data = categoryList[i]
+          .values
+          .toString()
+          .substring(1, categoryList[i].values.toString().length - 1);
       categorySet.add(data);
     }
     List<String> listCategory = [...categorySet.toList()];
     Map<String, double> categoryAmount = {};
 
-    for(int i = 0; i < listCategory.length; i++){
-      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '%$date'");
+    for (int i = 0; i < listCategory.length; i++) {
+      final List<Map<String, Object?>> queryResult = await db.rawQuery(
+          "SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '%$date'");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString().isEmpty){
-        amount= "0";
-      }else {
+      if (listResult[0].toString().isEmpty) {
+        amount = "0";
+      } else {
         amount = listResult[0].toString();
       }
       double amountLast = double.parse(amount);
@@ -241,24 +280,30 @@ class DatabaseHandler {
     return categoryAmount;
   }
 
-  Future<Map<String, double>> retrieveWithCategoryMonth(String trans,String month,String year) async {
+  Future<Map<String, double>> retrieveWithCategoryMonth(
+      String trans, String month, String year) async {
     String? amount;
     final Database db = await initializeDB();
-    List<Map<String, Object?>> categoryList = await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
+    List<Map<String, Object?>> categoryList =
+        await db.rawQuery("SELECT category FROM users WHERE trans = '$trans'");
     Set<String> categorySet = {};
-    for(int i = 0; i < categoryList.length; i++){
-      String data = categoryList[i].values.toString().substring(1, categoryList[i].values.toString().length - 1);
+    for (int i = 0; i < categoryList.length; i++) {
+      String data = categoryList[i]
+          .values
+          .toString()
+          .substring(1, categoryList[i].values.toString().length - 1);
       categorySet.add(data);
     }
     List<String> listCategory = [...categorySet.toList()];
     Map<String, double> categoryAmount = {};
 
-    for(int i = 0; i < listCategory.length; i++){
-      final List<Map<String, Object?>> queryResult = await db.rawQuery("SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '$month%' and date LIKE '%$year'");
+    for (int i = 0; i < listCategory.length; i++) {
+      final List<Map<String, Object?>> queryResult = await db.rawQuery(
+          "SELECT SUM(amount) as Total  FROM users WHERE trans = '$trans' and category = '${listCategory[i]}' and date LIKE '$month%' and date LIKE '%$year'");
       var listResult = queryResult[0].values.toList();
-      if(listResult[0].toString().isEmpty){
-        amount= "0";
-      }else {
+      if (listResult[0].toString().isEmpty) {
+        amount = "0";
+      } else {
         amount = listResult[0].toString();
       }
       double amountLast = double.parse(amount);
@@ -266,12 +311,10 @@ class DatabaseHandler {
     }
     return categoryAmount;
   }
-
 
   Future<List<Map<String, Object?>>> retrieveUsersDatabase() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query('users');
     return queryResult;
   }
-
 }

@@ -1,3 +1,4 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class AddData extends StatelessWidget {
         elevation: 0,
         backgroundColor: const Color(0xFF020925),
         title: const Text(
-          "Add account",
+          'Add account',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -25,9 +26,16 @@ class AddData extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const SizedBox(width: 10,),
-                    const Text("Group",style: TextStyle(color: Colors.white),),
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      "Group",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Container(
                       alignment: Alignment.centerRight,
                       width: MediaQuery.of(context).size.width - 80,
@@ -35,14 +43,23 @@ class AddData extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    const SizedBox(width: 10,),
-                    const Text("Name",style: TextStyle(color: Colors.white),),
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      "Name",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Container(
                       alignment: Alignment.centerRight,
                       width: MediaQuery.of(context).size.width - 80,
@@ -50,14 +67,23 @@ class AddData extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    const SizedBox(width: 10,),
-                    const Text("Amount",style: TextStyle(color: Colors.white),),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      "Amount",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     Container(
                       alignment: Alignment.centerRight,
                       width: MediaQuery.of(context).size.width - 80,
@@ -66,14 +92,23 @@ class AddData extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    const SizedBox(width: 10,),
-                    const Text("Note",style: TextStyle(color: Colors.white),),
-                    const SizedBox(width: 30,),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      "Note",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
                     Container(
                       alignment: Alignment.centerRight,
                       width: MediaQuery.of(context).size.width - 80,
@@ -81,18 +116,22 @@ class AddData extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                   ],
                 ),
-
               ],
             ),
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Center(
             child: FlatButton(
               height: 30,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               color: Colors.red,
               minWidth: MediaQuery.of(context).size.width - 100,
               onPressed: () {
