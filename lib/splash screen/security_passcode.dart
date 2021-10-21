@@ -17,7 +17,7 @@ class SecurityPasscode extends StatefulWidget {
 }
 
 class _SecurityPasscodeState extends State<SecurityPasscode> {
-  DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
+  // DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
 
   Future<bool?>? getBoolValuesSF() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

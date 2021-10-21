@@ -15,9 +15,9 @@ class TimeDb {
   TimeDb({this.id, this.time, this.reminder});
 
   TimeDb.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        time = res["time"],
-        reminder = res["reminder"];
+      : id = res['id'],
+        time = res['time'],
+        reminder = res['reminder'];
 
   Map<String, Object?> toMap() {
     return {'id': id, 'time': time, 'reminder': reminder};
@@ -28,7 +28,7 @@ class DatabaseHandlerTime {
   Database? _database;
 
   Future<Database?> get database async {
-    debugPrint("database getter called");
+    debugPrint('database getter called');
 
     if (_database != null) {
       return _database;
@@ -40,12 +40,13 @@ class DatabaseHandlerTime {
   }
 
   Future<Database> initializeDB() async {
-    String path = await getDatabasesPath();
+    final String path = await getDatabasesPath();
     return openDatabase(
       join(path, 'reminder.db'),
       onCreate: (database, version) async {
         await database.execute(
-          "CREATE TABLE reminders(id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT, reminder TEXT)",
+          'CREATE TABLE reminders(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+              ' time TEXT, reminder TEXT)',
         );
       },
       version: 1,
@@ -58,7 +59,7 @@ class DatabaseHandlerTime {
     for (var reminder in reminders) {
       result = await db.insert('reminders', reminder.toMap());
     }
-    debugPrint("$result");
+    debugPrint('$result');
     return result;
   }
 
@@ -72,26 +73,26 @@ class DatabaseHandlerTime {
     final db = await initializeDB();
     await db.delete(
       'time',
-      where: "id = ?",
+      where: 'id = ?',
       whereArgs: [id],
     );
   }
 
   Future<void> deleteDb() async {
     final db = await initializeDB();
-    await db.rawQuery("delete from reminders");
+    await db.rawQuery('delete from reminders');
   }
 
   Future<String?> retrieveWithTime() async {
     String? time;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList =
-        await db.rawQuery("SELECT time FROM reminders");
-    var last = categoryList.length - 1;
-    debugPrint("last time :  ${categoryList[last].values}");
+    final List<Map<String, Object?>> categoryList =
+        await db.rawQuery('SELECT time FROM reminders');
+    final last = categoryList.length - 1;
+    debugPrint('last time :  ${categoryList[last].values}');
     time = categoryList[last].values.toString();
-    time = time.replaceAll("(", "").replaceAll(")", "");
+    time = time.replaceAll('(', '').replaceAll(')', '');
     return time;
   }
 
@@ -99,12 +100,12 @@ class DatabaseHandlerTime {
     String? reminder;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList =
-        await db.rawQuery("SELECT reminder FROM reminders");
-    var last = categoryList.length - 1;
-    debugPrint("last reminder :  ${categoryList[last].values}");
+    final List<Map<String, Object?>> categoryList =
+        await db.rawQuery('SELECT reminder FROM reminders');
+    final last = categoryList.length - 1;
+    debugPrint('last reminder :  ${categoryList[last].values}');
     reminder = categoryList[last].values.toString();
-    reminder = reminder.replaceAll("(", "").replaceAll(")", "");
+    reminder = reminder.replaceAll('(', '').replaceAll(')', '');
     debugPrint(reminder);
     if (reminder == 'false') {
       return false;
@@ -117,13 +118,13 @@ class DatabaseHandlerTime {
     String? id;
     final Database db = await initializeDB();
 
-    List<Map<String, Object?>> categoryList =
-        await db.rawQuery("SELECT id FROM reminders");
-    var last = categoryList.length - 1;
-    debugPrint("last time :  ${categoryList[last].values}");
+    final List<Map<String, Object?>> categoryList =
+        await db.rawQuery('SELECT id FROM reminders');
+    final last = categoryList.length - 1;
+    debugPrint('last time :  ${categoryList[last].values}');
     id = categoryList[last].values.toString();
-    id = id.replaceAll("(", "").replaceAll(")", "");
-    int idIs = int.parse(id);
+    id = id.replaceAll('(', '').replaceAll(')', '');
+    final int idIs = int.parse(id);
     return idIs;
   }
 }

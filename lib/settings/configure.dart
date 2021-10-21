@@ -56,7 +56,7 @@ class _ConfigureState extends State<Configure> {
 
   DatabaseHandlerTime handler = DatabaseHandlerTime();
 
-  DatabaseHandlerPasscode handlerPasscode = DatabaseHandlerPasscode();
+  // DatabaseHandlerPasscode handlerPasscode = DatabaseHandlerPasscode();
 
   @override
   void initState() {

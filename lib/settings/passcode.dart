@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:money_management/color/app_color.dart' as app_color;
-import 'package:money_management/db/database_passcode.dart';
 import 'package:money_management/settings/configure.dart';
 
 class PassCode extends StatefulWidget {
@@ -30,7 +29,7 @@ class _PassCodeState extends State<PassCode> {
     return stringValue;
   }
 
-  DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
+  // DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
 
   int count = 0;
   String passcode = '';
@@ -349,6 +348,7 @@ class _PassCodeState extends State<PassCode> {
               height: 30,
             ),
           ],
-        ));
+        ),
+    );
   }
 }

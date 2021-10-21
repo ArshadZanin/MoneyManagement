@@ -224,7 +224,7 @@ class SplashScreen1SubHome extends StatefulWidget {
 }
 
 class _SplashScreen1SubHomeState extends State<SplashScreen1SubHome> {
-  DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
+  // DatabaseHandlerPasscode handler = DatabaseHandlerPasscode();
 
   bool? check = false;
 

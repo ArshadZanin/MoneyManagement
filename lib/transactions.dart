@@ -107,6 +107,24 @@ class _TransactionState extends State<Transaction> {
     });
   }
 
+  double percentBar(double income, double expense){
+    if(expense < income){
+      double value1 = (expense / income) - 1;
+      if(value1 < 0){
+        value1 = value1 * -1;
+      }
+      return value1;
+    }else if(expense > income){
+      double value2 = 1 - (income / expense);
+      if(value2 < 0){
+        value2 = value2 * -1;
+      }
+      return value2;
+    }else{
+      return 0.0;
+    }
+  }
+
   int countIs(int count) {
     count++;
     return count;
@@ -406,9 +424,10 @@ class _TransactionState extends State<Transaction> {
                           animation: true,
                           lineHeight: 20.0,
                           animationDuration: 2000,
-                          percent: expense! <= income!
-                              ? (1 - expense! / income!)
-                              : (expense! / income! - 1),
+                          percent: percentBar(income!, expense!),
+                          // expense! <= income!
+                          //     ? (1 - expense! / income!)
+                          //     : (expense! / income! - 1),
                           center: income! - expense! < 0
                               ? Text(
                                   '${income! - expense!}',
