@@ -476,7 +476,7 @@ class _TransactionState extends State<Transaction> {
                             color: Colors.black26,
                           ),
                           Text(
-                            'No data available!',
+                            'No Transaction available!',
                             style: TextStyle(
                               fontSize: 19,
                               fontWeight: FontWeight.bold,

@@ -63,8 +63,8 @@ class _AccountsState extends State<Accounts> {
                 end: Alignment.bottomRight,
                 // Alignment(0.8, 0.8), // 10% of the width, so there are ten blinds.
                 colors: <Color>[
-                  Color(0xff4700fd),
-                  Color(0xff541ce5),
+                  Color(0xff28008d),
+                  Color(0xff3003a5),
                   Color(0xff6325ff)
                 ], // red to yellow
                 tileMode:

@@ -8,7 +8,7 @@ import 'package:money_management/db/database_income_category.dart';
 import 'package:money_management/db/database_transaction.dart';
 import 'package:money_management/onboard_anime/onboard_01.dart';
 import 'package:money_management/settings/configure.dart';
-import 'package:money_management/settings/help.dart';
+import 'package:money_management/settings/about.dart';
 import 'package:money_management/splash%20screen/splash_screen.dart';
 
 class Settings extends StatefulWidget {
@@ -130,18 +130,18 @@ class _SettingsState extends State<Settings> {
                 ),
                 IconButton(
                   onPressed: () {
-                    debugPrint('Helppp');
+                    debugPrint('about us');
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => const Help()));
                   },
                   icon: const Icon(
-                    Icons.help,
+                    Icons.info_outline,
                     color: Colors.black,
                   ),
                 ),
                 const Center(
                     child: Text(
-                  'Help',
+                  'About Us',
                   style: TextStyle(color: Colors.black),
                 )),
               ],
